@@ -3,9 +3,9 @@ import { Metadata } from "next";
 import Image from "next/image";
 import { getPostBySlug, getAllPosts } from "@/lib/mdx/mdx-utils";
 import { processMdx } from "@/lib/mdx/mdx-server";
-import { PostMeta } from "@/types/mdx";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { TableOfContents } from "@/components/mdx/table-of-contents";
 
 export async function generateMetadata({
   params,
@@ -25,7 +25,7 @@ export async function generateMetadata({
         ...(meta.coverImage && { images: [{ url: meta.coverImage }] }),
       },
     };
-  } catch (error) {
+  } catch {
     return {
       title: "Post Not Found",
       description: "The post you are looking for does not exist",
@@ -51,11 +51,11 @@ export default async function BlogPostPage({
     const { content: mdxContent } = await processMdx(content);
 
     return (
-      <div className="mx-auto max-w-3xl px-6 py-10">
+      <div className="mx-auto max-w-5xl px-6 py-10">
         {/* Back link */}
         <Link
           href="/blog"
-          className="mb-8 inline-flex items-center text-xs font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
+          className="mb-8 inline-flex items-center text-xs font-medium text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200"
         >
           <svg
             className="mr-1 h-3 w-3"
@@ -73,70 +73,83 @@ export default async function BlogPostPage({
           Back to blog
         </Link>
 
-        {/* Post header */}
-        <header className="mb-10">
-          {/* Meta information */}
-          <div className="mb-4 flex flex-wrap items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
-            <time>{meta.date}</time>
-            {meta.readingTime && (
-              <>
-                <span className="text-gray-300 dark:text-gray-600">•</span>
-                <span>{meta.readingTime}</span>
-              </>
-            )}
-            {meta.author && (
-              <>
-                <span className="text-gray-300 dark:text-gray-600">•</span>
-                <span>By {meta.author}</span>
-              </>
-            )}
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-12">
+          {/* Main content */}
+          <div className="lg:col-span-8">
+            {/* Post header */}
+            <header className="mb-10">
+              {/* Meta information */}
+              <div className="mb-4 flex flex-wrap items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
+                <time>{meta.date}</time>
+                {meta.readingTime && (
+                  <>
+                    <span className="text-slate-300 dark:text-slate-600">
+                      •
+                    </span>
+                    <span>{meta.readingTime}</span>
+                  </>
+                )}
+                {meta.author && (
+                  <>
+                    <span className="text-slate-300 dark:text-slate-600">
+                      •
+                    </span>
+                    <span>By {meta.author}</span>
+                  </>
+                )}
+              </div>
+
+              {/* Title */}
+              <h1 className="mb-4 text-2xl font-bold leading-snug text-slate-900 dark:text-white sm:text-3xl">
+                {meta.title}
+              </h1>
+
+              {/* Tags */}
+              {meta.tags && meta.tags.length > 0 && (
+                <div className="mb-6 flex flex-wrap gap-1.5">
+                  {meta.tags.map((tag: string) => (
+                    <Badge
+                      key={tag}
+                      variant="ghost"
+                      size="sm"
+                      className="font-normal"
+                    >
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              )}
+
+              {/* Cover image */}
+              {meta.coverImage && (
+                <div className="relative mb-8 aspect-[3/2] rounded-sm overflow-hidden">
+                  <Image
+                    src={meta.coverImage}
+                    alt={meta.title}
+                    fill
+                    priority
+                    sizes="(max-width: 640px) 100vw, 720px"
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-black/5" />
+                </div>
+              )}
+            </header>
+
+            {/* Article content */}
+            <article className="prose prose-sm max-w-none text-slate-700 dark:prose-invert prose-headings:font-bold prose-headings:text-slate-900 prose-p:leading-relaxed prose-p:text-slate-700 prose-a:text-blue-600 prose-a:underline prose-a:underline-offset-2 hover:prose-a:text-blue-800 dark:prose-headings:text-slate-50 dark:prose-p:text-slate-300 dark:prose-a:text-blue-400 dark:hover:prose-a:text-blue-300">
+              {mdxContent}
+            </article>
           </div>
 
-          {/* Title */}
-          <h1 className="mb-4 font-serif text-2xl font-normal leading-snug text-gray-900 dark:text-white sm:text-3xl">
-            {meta.title}
-          </h1>
-
-          {/* Tags */}
-          {meta.tags && meta.tags.length > 0 && (
-            <div className="mb-6 flex flex-wrap gap-1.5">
-              {meta.tags.map((tag: string) => (
-                <Badge
-                  key={tag}
-                  variant="ghost"
-                  size="sm"
-                  className="font-normal"
-                >
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-          )}
-
-          {/* Cover image */}
-          {meta.coverImage && (
-            <div className="relative -mx-6 mb-8 aspect-[3/2] sm:mx-0 sm:rounded-sm">
-              <Image
-                src={meta.coverImage}
-                alt={meta.title}
-                fill
-                priority
-                sizes="(max-width: 640px) 100vw, 720px"
-                className="object-cover sm:rounded-sm"
-              />
-
-              <div className="absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-black/5 sm:rounded-sm" />
-            </div>
-          )}
-        </header>
-
-        {/* Article content */}
-        <article className="prose prose-sm max-w-none text-gray-600 dark:prose-invert prose-headings:font-serif prose-headings:font-normal prose-headings:text-gray-900 prose-p:leading-relaxed prose-p:text-gray-600 prose-a:text-blue-600 prose-a:no-underline prose-a:transition-colors hover:prose-a:text-blue-800 dark:prose-headings:text-white dark:prose-p:text-gray-300 dark:prose-a:text-blue-400 dark:hover:prose-a:text-blue-300">
-          {mdxContent}
-        </article>
+          {/* Table of Contents */}
+          <div className="lg:col-span-4 sticky self-start top-0">
+            <TableOfContents />
+          </div>
+        </div>
       </div>
     );
-  } catch (error) {
+  } catch {
     notFound();
   }
 }

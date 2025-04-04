@@ -1,32 +1,73 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, ReactNode } from "react";
 import { CodeBlockProps } from "@/types/mdx";
 
-export default function CodeBlock({
-  children,
-  className,
-  ...props
-}: CodeBlockProps) {
+// Define a type for React elements with props
+interface ReactElementWithProps {
+  props: {
+    children?: ReactNode;
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+}
+
+// Helper function to check if object is a React element with props
+function isReactElementWithProps(obj: unknown): obj is ReactElementWithProps {
+  return (
+    typeof obj === "object" &&
+    obj !== null &&
+    "props" in obj &&
+    typeof (obj as Record<string, unknown>).props === "object"
+  );
+}
+
+// Helper function to extract code content from highlighted code blocks
+function extractRawCode(children: ReactNode): string {
+  if (!children) return "";
+
+  if (typeof children === "string") {
+    return children;
+  }
+
+  if (isReactElementWithProps(children)) {
+    if (Array.isArray(children.props.children)) {
+      return children.props.children
+        .map((child: ReactNode) => extractRawCode(child))
+        .join("");
+    }
+
+    return extractRawCode(children.props.children);
+  }
+
+  return "";
+}
+
+// Helper function to extract language from className
+function extractLanguage(className?: string): string {
+  if (!className) return "code";
+
+  const hljsMatch = className.match(/hljs\s+language-([a-zA-Z0-9_-]+)/);
+  if (hljsMatch) return hljsMatch[1];
+
+  const standardMatch = className.match(/language-([a-zA-Z0-9_-]+)/);
+  if (standardMatch) return standardMatch[1];
+
+  return "code";
+}
+
+export default function CodeBlock({ children, ...props }: CodeBlockProps) {
   const textRef = useRef<HTMLPreElement>(null);
   const [isCopied, setIsCopied] = useState(false);
 
-  const language = className?.replace(/language-/, "") || "code";
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const language = extractLanguage((children as any)?.props?.className);
 
   const copyToClipboard = () => {
     try {
-      if (
-        children &&
-        typeof children === "object" &&
-        "props" in children &&
-        children.props &&
-        typeof children.props === "object" &&
-        "children" in children.props &&
-        typeof children.props.children === "string"
-      ) {
-        navigator.clipboard.writeText(
-          JSON.stringify(children.props.children, null, 2)
-        );
+      if (children) {
+        const code = extractRawCode(children);
+        navigator.clipboard.writeText(code);
         setIsCopied(true);
         setTimeout(() => setIsCopied(false), 2000);
       }
@@ -37,10 +78,12 @@ export default function CodeBlock({
 
   return (
     <div className="group relative my-6 overflow-hidden rounded-md bg-slate-950 border border-slate-800/70 dark:bg-slate-900/90 shadow-sm">
+      {/* Language badge */}
       <div className="absolute right-0 top-0 z-[1] rounded-bl-md bg-slate-800/90 px-2 py-1 text-xs font-medium text-slate-200 backdrop-blur-sm dark:bg-slate-800/80">
         {language}
       </div>
 
+      {/* Copy button */}
       <button
         onClick={copyToClipboard}
         aria-label="Copy code"
@@ -78,6 +121,7 @@ export default function CodeBlock({
         )}
       </button>
 
+      {/* Code content with padding for language badge */}
       <div className="overflow-auto p-4 pt-8 text-sm font-mono text-slate-100 scrollbar-thin scrollbar-track-slate-900 scrollbar-thumb-slate-700">
         <pre ref={textRef} className="font-mono" {...props}>
           {children}
