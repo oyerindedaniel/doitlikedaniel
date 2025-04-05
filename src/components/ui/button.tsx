@@ -10,19 +10,21 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        default:
+          "bg-primary text-primary-foreground hover:bg-primary/90 dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/80",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90 dark:bg-destructive dark:text-destructive-foreground dark:hover:bg-destructive/80",
         outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+          "border border-input bg-background hover:bg-accent hover:text-accent-foreground dark:border-slate-700 dark:bg-slate-900 dark:hover:bg-slate-800 dark:hover:text-slate-200",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600",
+        ghost:
+          "hover:bg-accent hover:text-accent-foreground dark:hover:bg-slate-800 dark:hover:text-slate-200",
+        link: "text-primary underline-offset-4 hover:underline dark:text-blue-400 dark:hover:text-blue-300",
         gradient:
-          "text-white overflow-hidden before:absolute before:inset-0 before:z-[-1] before:bg-gradient-to-r before:from-blue-500 before:to-purple-600 before:opacity-90 hover:before:opacity-100 transition-all duration-300",
+          "text-white overflow-hidden before:absolute before:inset-0 before:z-[-1] before:bg-gradient-to-r before:from-blue-500 before:to-purple-600 before:opacity-90 hover:before:opacity-100 transition-all duration-300 dark:before:from-blue-600 dark:before:to-purple-700",
         animated:
-          "text-slate-900 dark:text-white relative overflow-hidden before:absolute before:left-0 before:bottom-0 before:h-[2px] before:w-0 before:bg-blue-500 before:transition-all before:duration-300 hover:before:w-full focus:before:w-full",
+          "text-slate-900 dark:text-white relative overflow-hidden before:absolute before:left-0 before:bottom-0 before:h-[2px] before:w-0 before:bg-blue-500 before:transition-all before:duration-300 hover:before:w-full focus:before:w-full dark:before:bg-blue-400",
         ripple:
           "text-slate-900 dark:text-white relative overflow-hidden before:absolute before:inset-0 before:z-[-1] before:translate-x-[-100%] before:translate-y-0 before:bg-slate-100 before:opacity-0 dark:before:bg-slate-800 hover:before:translate-x-0 hover:before:opacity-100 before:transition-all before:duration-500 before:ease-out",
       },
