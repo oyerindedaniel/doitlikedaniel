@@ -17,6 +17,7 @@
     "date-fns": "^4.1.0",
     "gray-matter": "^4.0.3",
     "highlight.js": "^11.11.1",
+    "lucide-react": "^0.487.0",
     "motion": "^12.6.3",
     "next": "15.2.4",
     "next-mdx-remote": "^5.0.0",

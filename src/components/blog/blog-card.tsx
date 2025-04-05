@@ -67,7 +67,7 @@ export default function BlogPost({ post }: BlogPostProps) {
               {post.tags.map((tag: string) => (
                 <Badge
                   key={tag}
-                  variant="ghost"
+                  variant="primary"
                   size="sm"
                   className="font-normal"
                 >
