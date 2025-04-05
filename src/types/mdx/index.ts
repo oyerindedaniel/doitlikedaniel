@@ -22,8 +22,9 @@ export type CustomImageProps = Omit<
   >;
 
 export interface CodeBlockProps {
-  children: ReactNode;
+  children: string;
   className?: string;
+  language?: string;
   [key: string]: unknown;
 }
 
