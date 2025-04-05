@@ -3,7 +3,6 @@
 import { useRef, useState, ReactNode } from "react";
 import { CodeBlockProps } from "@/types/mdx";
 
-// Define a type for React elements with props
 interface ReactElementWithProps {
   props: {
     children?: ReactNode;
@@ -121,7 +120,7 @@ export default function CodeBlock({ children, ...props }: CodeBlockProps) {
         )}
       </button>
 
-      {/* Code content with padding for language badge */}
+      {/* Code content */}
       <div className="overflow-auto p-4 pt-8 text-sm font-mono text-slate-100 scrollbar-thin scrollbar-track-slate-900 scrollbar-thumb-slate-700">
         <pre ref={textRef} className="font-mono" {...props}>
           {children}

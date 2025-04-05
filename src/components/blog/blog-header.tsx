@@ -18,9 +18,12 @@ export default function BlogHeader() {
       </div>
 
       {/* Subtle gradient accent */}
-      <div className="absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400" />
+      <div
+        aria-hidden="true"
+        className="absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400"
+      />
 
-      {/* Content with restrained typography */}
+      {/* Content */}
       <div className="relative container mx-auto px-6">
         <Badge variant="primary" size="sm" className="mb-4">
           Insights & Thoughts

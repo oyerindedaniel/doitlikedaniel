@@ -88,7 +88,7 @@ export function TableOfContents() {
 
   return (
     <nav className="hidden lg:block">
-      <div className="sticky top-24 max-h-[calc(100vh-10rem)] overflow-y-auto pb-8">
+      <div>
         <h4 className="mb-3 text-sm font-medium text-slate-900 dark:text-slate-100">
           Table of Contents
         </h4>

@@ -143,7 +143,7 @@ export default async function BlogPostPage({
           </div>
 
           {/* Table of Contents */}
-          <div className="lg:col-span-4 sticky self-start top-0">
+          <div className="lg:col-span-4 sticky self-start top-12">
             <TableOfContents />
           </div>
         </div>

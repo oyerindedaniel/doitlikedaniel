@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ThemeToggler } from "@/components/theme-toggler";
 
 export default function Header() {
   const pathname = usePathname();
@@ -17,7 +18,7 @@ export default function Header() {
           Daniel
         </Link> */}
 
-        <nav className="ml-auto text-sm">
+        <nav className="ml-auto text-sm flex items-center gap-6">
           <ul className="flex gap-6">
             {/* <li>
               <Link
@@ -62,6 +63,7 @@ export default function Header() {
               </Link>
             </li> */}
           </ul>
+          <ThemeToggler />
         </nav>
       </div>
     </header>
