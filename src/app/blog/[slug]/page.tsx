@@ -6,6 +6,8 @@ import { processMdx } from "@/lib/mdx/mdx-server";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { TableOfContents } from "@/components/mdx/table-of-contents";
+import { Button } from "@/components/ui/button";
+import { ReadingProgress } from "@/components/mdx/reading-progress";
 
 export async function generateMetadata({
   params,
@@ -51,31 +53,39 @@ export default async function BlogPostPage({
     const { content: mdxContent } = await processMdx(content);
 
     return (
-      <div className="mx-auto max-w-5xl px-6 py-10">
+      <div className="mx-auto px-4 py-10">
         {/* Back link */}
-        <Link
-          href="/blog"
-          className="mb-8 inline-flex items-center text-xs font-medium text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200"
-        >
-          <svg
-            className="mr-1 h-3 w-3"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
-          Back to blog
-        </Link>
+        <div className="mx-auto max-w-5xl px-4 mb-8">
+          <Button variant="link" size="sm" asChild>
+            <Link
+              href="/blog"
+              className="inline-flex items-center text-xs font-medium text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200"
+            >
+              <svg
+                className="mr-1 h-3 w-3"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+              Back to blog
+            </Link>
+          </Button>
+        </div>
 
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-12">
-          {/* Main content */}
-          <div className="lg:col-span-8">
+        {/* Main grid layout */}
+        <div className="grid grid-cols-12 mx-auto max-w-[90rem]">
+          {/* Left spacing - hidden on mobile */}
+          <div className="hidden lg:block lg:col-span-2"></div>
+
+          {/* Main content - centered */}
+          <div className="col-span-12 lg:col-span-8 px-4">
             {/* Post header */}
             <header className="mb-10">
               {/* Meta information */}
@@ -110,7 +120,7 @@ export default async function BlogPostPage({
                   {meta.tags.map((tag: string) => (
                     <Badge
                       key={tag}
-                      variant="ghost"
+                      variant="primary"
                       size="sm"
                       className="font-normal"
                     >
@@ -143,9 +153,12 @@ export default async function BlogPostPage({
           </div>
 
           {/* Table of Contents */}
-          <div className="lg:col-span-4 sticky self-start top-12">
+
+          <div className="hidden lg:block lg:col-span-2 sticky self-start top-12">
             <TableOfContents />
           </div>
+
+          <ReadingProgress />
         </div>
       </div>
     );

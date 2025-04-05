@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import Link from "next/link";
 
 interface TocItem {
@@ -11,15 +11,15 @@ interface TocItem {
 
 export function TableOfContents() {
   const [headings, setHeadings] = useState<TocItem[]>([]);
-  const [activeId, setActiveId] = useState<string>("");
+  const [activeIds, setActiveIds] = useState<string[]>([]);
   const observerRef = useRef<IntersectionObserver | null>(null);
+  const visibleHeadingsRef = useRef(new Map<string, boolean>());
 
   // Extract headings from the content
   useEffect(() => {
     const article = document.querySelector("article");
     if (!article) return;
 
-    // Get all h1, h2, h3 elements
     const elements = article.querySelectorAll("h1, h2, h3");
     const items: TocItem[] = [];
 
@@ -42,29 +42,59 @@ export function TableOfContents() {
     });
 
     setHeadings(items);
+
+    // Initialize the visibility map
+    const visibleMap = new Map<string, boolean>();
+    items.forEach((item) => {
+      visibleMap.set(item.id, false);
+    });
+    visibleHeadingsRef.current = visibleMap;
   }, []);
 
+  // Determine active headings based on visibility
+  const updateActiveHeadings = useCallback(() => {
+    if (headings.length === 0) return;
+
+    const currentlyVisible = headings
+      .filter((heading) => visibleHeadingsRef.current.get(heading.id))
+      .map((heading) => heading.id);
+
+    if (currentlyVisible.length > 0) {
+      setActiveIds(currentlyVisible);
+    } else {
+      setActiveIds([]);
+    }
+  }, [headings]);
+
+  // Set up IntersectionObserver
   useEffect(() => {
     if (headings.length === 0) return;
 
-    const callback = (entries: IntersectionObserverEntry[]) => {
+    // IntersectionObserver callback
+    const handleIntersection = (entries: IntersectionObserverEntry[]) => {
+      let hasChanges = false;
+
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setActiveId(entry.target.id);
+        const currentState = visibleHeadingsRef.current.get(entry.target.id);
+        if (entry.isIntersecting !== currentState) {
+          visibleHeadingsRef.current.set(entry.target.id, entry.isIntersecting);
+          hasChanges = true;
         }
       });
+
+      if (hasChanges) {
+        updateActiveHeadings();
+      }
     };
 
     if (observerRef.current) {
       observerRef.current.disconnect();
     }
 
-    const options = {
-      rootMargin: "0px 0px -80% 0px",
-      threshold: 1.0,
-    };
-
-    observerRef.current = new IntersectionObserver(callback, options);
+    observerRef.current = new IntersectionObserver(handleIntersection, {
+      rootMargin: "0px",
+      threshold: 0.5,
+    });
 
     headings.forEach((heading) => {
       const element = document.getElementById(heading.id);
@@ -78,26 +108,24 @@ export function TableOfContents() {
         observerRef.current.disconnect();
       }
     };
-  }, [headings]);
+  }, [headings, updateActiveHeadings]);
 
   if (headings.length === 0) {
     return null;
   }
 
-  console.log(headings);
-
   return (
-    <nav className="hidden lg:block">
+    <nav>
       <div>
         <h4 className="mb-3 text-sm font-medium text-slate-900 dark:text-slate-100">
           Table of Contents
         </h4>
-        <ul className="text-sm">
+        <ul className="text-xs">
           {headings.map((heading) => (
             <li
               key={heading.id}
               className={`border-l-2 ${
-                activeId === heading.id
+                activeIds.includes(heading.id)
                   ? "border-blue-500 font-medium text-blue-600 dark:text-blue-400"
                   : "border-slate-200 text-slate-600 hover:border-slate-300 dark:border-slate-800 dark:text-slate-400 dark:hover:border-slate-700"
               }`}
@@ -111,6 +139,7 @@ export function TableOfContents() {
                   document.getElementById(heading.id)?.scrollIntoView({
                     behavior: "smooth",
                   });
+                  setActiveIds([heading.id]);
                 }}
               >
                 {heading.text}

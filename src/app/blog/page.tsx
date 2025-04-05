@@ -83,7 +83,7 @@ export default function BlogPage() {
                     {featuredPost.tags.map((tag: string) => (
                       <Badge
                         key={tag}
-                        variant="ghost"
+                        variant="primary"
                         size="sm"
                         className="font-normal"
                       >

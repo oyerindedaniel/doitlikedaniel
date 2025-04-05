@@ -17,17 +17,23 @@ export default function CustomImage({
 
   // For external images or non-optimizable ones
   if (src.startsWith("http") || src.startsWith("data:")) {
+    // eslint-disable-next-line @next/next/no-img-element
     return <img src={src} alt={alt || "Blog image"} {...props} />;
   }
+  console.log("src", src, width, height);
 
   // For local images
   return (
-    <span className="inline-block relative my-6 overflow-hidden rounded-sm">
+    <span className="inline-block relative my-3 overflow-hidden rounded-sm">
       <Image
         src={src}
         alt={alt || "Blog image"}
         width={width}
         height={height}
+        style={{
+          width: "100%",
+          height: "auto",
+        }}
         sizes={sizes}
         className="w-full"
         {...props}

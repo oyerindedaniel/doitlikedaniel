@@ -118,3 +118,7 @@ body {
   color: var(--foreground);
   /* font-family: var(--font-geist-sans); */
 }
+
+.hljs {
+  background: transparent !important;
+}

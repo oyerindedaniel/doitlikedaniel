@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Slot, Slottable } from "@radix-ui/react-slot";
+import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
@@ -74,17 +74,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         {...props}
       >
-        {leftElement && (
-          <span className="mr-2 inline-flex items-center">{leftElement}</span>
-        )}
-        {children && (
-          <span className="inline-flex items-center">
-            <Slottable>{children}</Slottable>
-          </span>
-        )}
-        {rightElement && (
-          <span className="ml-2 inline-flex items-center">{rightElement}</span>
-        )}
+        <span className="inline-flex items-center justify-center">
+          {leftElement && <span className="mr-2">{leftElement}</span>}
+          {children}
+          {rightElement && <span className="ml-2">{rightElement}</span>}
+        </span>
       </Comp>
     );
   }

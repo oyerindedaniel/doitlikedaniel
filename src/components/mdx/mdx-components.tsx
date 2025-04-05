@@ -8,7 +8,7 @@ import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
 import rehypeHighlight from "rehype-highlight";
 import { ReactNode } from "react";
-import Image from "next/image";
+// import Image from "next/image";
 
 interface ComponentProps {
   children?: ReactNode;
@@ -27,10 +27,10 @@ export const mdxComponents = {
   CalloutBox,
   YouTube: YoutubeEmbed,
 
-  Image,
+  // Image,
   h1: ({ children, ...props }: ComponentProps) => (
     <h1
-      className="mt-5 mb-4 text-2xl font-bold text-slate-900 dark:text-slate-50"
+      className="mt-4 mb-3 text-2xl font-bold text-slate-900 dark:text-slate-50"
       {...props}
     >
       {children}
@@ -38,7 +38,7 @@ export const mdxComponents = {
   ),
   h2: ({ children, ...props }: ComponentProps) => (
     <h2
-      className="mt-8 mb-3 text-xl font-bold text-slate-800 dark:text-slate-100"
+      className="mt-7 mb-2 text-xl font-bold text-slate-800 dark:text-slate-100"
       {...props}
     >
       {children}
@@ -46,7 +46,7 @@ export const mdxComponents = {
   ),
   h3: ({ children, ...props }: ComponentProps) => (
     <h3
-      className="mt-6 mb-3 text-lg font-bold text-slate-800 dark:text-slate-100"
+      className="mt-5 mb-3 text-lg font-bold text-slate-800 dark:text-slate-100"
       {...props}
     >
       {children}
@@ -62,7 +62,7 @@ export const mdxComponents = {
   ),
   p: ({ children, ...props }: ComponentProps) => (
     <p
-      className="mb-4 text-slate-700 dark:text-slate-300 leading-relaxed"
+      className="mb-2 text-slate-700 dark:text-slate-300 leading-relaxed"
       {...props}
     >
       {children}
