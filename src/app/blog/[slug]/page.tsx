@@ -9,6 +9,7 @@ import { TableOfContents } from "@/components/mdx/table-of-contents";
 import { Button } from "@/components/ui/button";
 import { ReadingProgress } from "@/components/mdx/reading-progress";
 import { MetaItem } from "@/components/ui/meta-item";
+import logger from "@/utils/logger";
 
 export async function generateMetadata({
   params,
@@ -225,7 +226,8 @@ export default async function BlogPostPage({
         </div>
       </div>
     );
-  } catch {
+  } catch (error) {
+    logger.error("Error in BlogPostPage:", error);
     notFound();
   }
 }

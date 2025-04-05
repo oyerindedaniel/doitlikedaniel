@@ -1,72 +1,21 @@
 "use client";
 
-import { useRef, useState, ReactNode } from "react";
+import { useRef, useState } from "react";
 import { CodeBlockProps } from "@/types/mdx";
+import { Button } from "@/components/ui/button";
 
-interface ReactElementWithProps {
-  props: {
-    children?: ReactNode;
-    [key: string]: unknown;
-  };
-  [key: string]: unknown;
-}
-
-// Helper function to check if object is a React element with props
-function isReactElementWithProps(obj: unknown): obj is ReactElementWithProps {
-  return (
-    typeof obj === "object" &&
-    obj !== null &&
-    "props" in obj &&
-    typeof (obj as Record<string, unknown>).props === "object"
-  );
-}
-
-// Helper function to extract code content from highlighted code blocks
-function extractRawCode(children: ReactNode): string {
-  if (!children) return "";
-
-  if (typeof children === "string") {
-    return children;
-  }
-
-  if (isReactElementWithProps(children)) {
-    if (Array.isArray(children.props.children)) {
-      return children.props.children
-        .map((child: ReactNode) => extractRawCode(child))
-        .join("");
-    }
-
-    return extractRawCode(children.props.children);
-  }
-
-  return "";
-}
-
-// Helper function to extract language from className
-function extractLanguage(className?: string): string {
-  if (!className) return "code";
-
-  const hljsMatch = className.match(/hljs\s+language-([a-zA-Z0-9_-]+)/);
-  if (hljsMatch) return hljsMatch[1];
-
-  const standardMatch = className.match(/language-([a-zA-Z0-9_-]+)/);
-  if (standardMatch) return standardMatch[1];
-
-  return "code";
-}
-
-export default function CodeBlock({ children, ...props }: CodeBlockProps) {
+export default function CodeBlock({
+  children: codeString,
+  language,
+  ...props
+}: CodeBlockProps) {
   const textRef = useRef<HTMLPreElement>(null);
   const [isCopied, setIsCopied] = useState(false);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const language = extractLanguage((children as any)?.props?.className);
-
   const copyToClipboard = () => {
     try {
-      if (children) {
-        const code = extractRawCode(children);
-        navigator.clipboard.writeText(code);
+      if (codeString) {
+        navigator.clipboard.writeText(codeString);
         setIsCopied(true);
         setTimeout(() => setIsCopied(false), 2000);
       }
@@ -83,10 +32,12 @@ export default function CodeBlock({ children, ...props }: CodeBlockProps) {
       </div>
 
       {/* Copy button */}
-      <button
+      <Button
         onClick={copyToClipboard}
+        size="icon"
+        variant="gradient"
         aria-label="Copy code"
-        className="absolute right-2 top-8 z-[1] rounded-md bg-slate-700/90 p-1.5 text-xs cursor-pointer text-slate-200 opacity-0 backdrop-blur-sm transition-opacity hover:bg-slate-600/90 focus:opacity-100 group-hover:opacity-100 dark:bg-slate-700/80 dark:hover:bg-slate-600/80"
+        className="w-8 h-8 absolute right-2 top-8 z-[1] rounded-md bg-slate-700/90 p-1.5 text-xs cursor-pointer text-slate-200 opacity-0 backdrop-blur-sm transition-opacity hover:bg-slate-600/90 focus:opacity-100 group-hover:opacity-100 dark:bg-slate-700/80 dark:hover:bg-slate-600/80"
       >
         {isCopied ? (
           <svg
@@ -118,12 +69,12 @@ export default function CodeBlock({ children, ...props }: CodeBlockProps) {
             <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path>
           </svg>
         )}
-      </button>
+      </Button>
 
       {/* Code content */}
       <div className="overflow-auto p-4 pt-8 text-sm font-mono text-slate-100 scrollbar-thin scrollbar-track-slate-900 scrollbar-thumb-slate-700">
         <pre ref={textRef} className="font-mono" {...props}>
-          {children}
+          {codeString}
         </pre>
       </div>
     </div>

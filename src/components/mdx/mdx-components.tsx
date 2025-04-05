@@ -1,9 +1,13 @@
+// "use client";
+
 import CustomLink from "./custom-link";
 import CustomImage from "./custom-image";
 import CodeBlock from "./code-block";
 import { Alert } from "./alert";
 import { CalloutBox } from "./callout-box";
 import { YoutubeEmbed } from "./youtube-embed";
+import { TSCodeBlock } from "./ts-code-block";
+import { SmartCodeBlock, Pre } from "./smart-code-block";
 import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
 import rehypeHighlight from "rehype-highlight";
@@ -20,12 +24,15 @@ export const mdxComponents = {
   // Override default elements
   a: CustomLink,
   img: CustomImage,
-  pre: CodeBlock,
+  pre: Pre,
+  code: (props: ComponentProps) => <code {...props} />,
 
   // Custom components
   Alert,
   CalloutBox,
   YouTube: YoutubeEmbed,
+  TSCodeBlock,
+  SmartCodeBlock,
 
   // Image,
   h1: ({ children, ...props }: ComponentProps) => (
@@ -172,4 +179,14 @@ export const mdxOptions = {
   ],
 };
 
-export { CustomLink, CustomImage, CodeBlock, Alert, CalloutBox, YoutubeEmbed };
+export {
+  CustomLink,
+  CustomImage,
+  CodeBlock,
+  Alert,
+  CalloutBox,
+  YoutubeEmbed,
+  TSCodeBlock,
+  SmartCodeBlock,
+  Pre,
+};

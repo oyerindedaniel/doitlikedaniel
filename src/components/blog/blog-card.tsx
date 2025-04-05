@@ -62,6 +62,7 @@ export default function BlogPost({ post }: BlogPostProps) {
             {post.readingTime && (
               <>
                 <span className="text-gray-300 dark:text-gray-600">•</span>
+                {/* Reading time with icon */}
                 <MetaItem
                   icon={
                     <svg

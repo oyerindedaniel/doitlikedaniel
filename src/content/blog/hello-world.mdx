@@ -25,6 +25,104 @@ function greeting(name) {
 console.log(greeting("World"));
 ```
 
+## TypeScript Editor with Type Information
+
+One of the coolest features of this blog is the ability to show TypeScript code with type information. Hover over variables and functions to see their types:
+
+<TSCodeBlock filename="types-example.ts" id="user-interface-example">
+{`// TypeScript interface definition
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  role: "admin" | "user" | "guest";
+  age?: number;
+}
+
+// Function with type annotations
+function getUserDisplayName(user: User): string {
+return user.role === "admin"
+? \`\${user.name} (Admin)\`
+: user.name;
+}
+
+// Example usage
+const currentUser: User = {
+id: 1,
+name: "Daniel",
+email: "daniel@example.com",
+role: "admin"
+};
+
+const displayName = getUserDisplayName(currentUser);
+console.log(displayName); // Output: "Daniel (Admin)"
+`}
+
+</TSCodeBlock>
+
+## Interactive TypeScript Editor
+
+You can even make the editor interactive, allowing you to edit and experiment with the code:
+
+<TSCodeBlock filename="interactive-example.ts" editable={true} height="350px" id="todo-item-example">
+{`// Todo Item Example - Try editing this code!
+// - Change the type definition
+// - Add new class methods
+// - Experiment with generics
+
+class TodoItem<T> {
+private \_completed: boolean = false;
+
+constructor(
+public id: number,
+public title: string,
+public description?: string,
+public metadata?: T
+) {}
+
+get completed(): boolean {
+return this.\_completed;
+}
+
+complete(): void {
+this.\_completed = true;
+}
+
+toJSON() {
+return {
+id: this.id,
+title: this.title,
+description: this.description,
+completed: this.\_completed,
+metadata: this.metadata
+};
+}
+}
+
+// Example usage
+type TaskMetadata = {
+priority: "high" | "medium" | "low";
+category: string;
+tags: string[];
+};
+
+const task = new TodoItem<TaskMetadata>(
+1,
+"Learn TypeScript",
+"Study advanced TypeScript features",
+{
+priority: "high",
+category: "programming",
+tags: ["typescript", "learning"]
+}
+);
+
+task.complete();
+console.log(task.toJSON());
+`}
+
+</TSCodeBlock>
+
 ## Images
 
 You can include images in your MDX posts:
