@@ -12,6 +12,7 @@
     "@monaco-editor/react": "^4.7.0",
     "@radix-ui/react-slot": "^1.1.2",
     "@radix-ui/react-tooltip": "^1.1.8",
+    "@shikijs/transformers": "^3.2.1",
     "@tailwindcss/typography": "^0.5.16",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -32,6 +33,8 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@shikijs/monaco": "^3.2.1",
+    "@shikijs/rehype": "^3.2.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -39,6 +42,8 @@
     "eslint": "^9",
     "eslint-config-next": "15.2.4",
     "monaco-editor": "^0.52.2",
+    "prettier": "^3.5.3",
+    "shiki": "^3.2.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   },

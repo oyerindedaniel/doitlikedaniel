@@ -1,4 +1,4 @@
-import { ImgHTMLAttributes, ReactNode } from "react";
+import { ComponentProps, ImgHTMLAttributes, ReactNode } from "react";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { ImageProps } from "next/image";
 
@@ -21,12 +21,7 @@ export type CustomImageProps = Omit<
     Pick<ImageProps, "width" | "height" | "sizes" | "priority" | "quality">
   >;
 
-export interface CodeBlockProps {
-  children: string;
-  className?: string;
-  language?: string;
-  [key: string]: unknown;
-}
+export type CodeBlockProps = ComponentProps<"pre"> & {};
 
 export interface MdxContentProps {
   source: MDXRemoteSerializeResult;

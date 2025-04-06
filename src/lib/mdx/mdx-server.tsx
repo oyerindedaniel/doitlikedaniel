@@ -12,10 +12,7 @@ export async function processMdx(content: string): Promise<ProcessedMdx> {
     components: mdxComponents,
     options: {
       parseFrontmatter: true,
-      mdxOptions: {
-        remarkPlugins: mdxOptions.remarkPlugins,
-        rehypePlugins: mdxOptions.rehypePlugins,
-      },
+      ...mdxOptions,
     },
   });
 

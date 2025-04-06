@@ -7,11 +7,18 @@ import { Alert } from "./alert";
 import { CalloutBox } from "./callout-box";
 import { YoutubeEmbed } from "./youtube-embed";
 import { TSCodeBlock } from "./ts-code-block";
-import { SmartCodeBlock, Pre } from "./smart-code-block";
+import { SmartPre } from "./smart-code-block";
 import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
-import rehypeHighlight from "rehype-highlight";
+import rehypeShiki from "@shikijs/rehype";
+import {
+  transformerNotationDiff,
+  transformerNotationHighlight,
+  transformerNotationFocus,
+  transformerNotationWordHighlight,
+} from "@shikijs/transformers";
 import { ReactNode } from "react";
+import { MDXRemoteProps } from "next-mdx-remote/rsc";
 // import Image from "next/image";
 
 interface ComponentProps {
@@ -24,7 +31,7 @@ export const mdxComponents = {
   // Override default elements
   a: CustomLink,
   img: CustomImage,
-  pre: Pre,
+  pre: CodeBlock,
   code: (props: ComponentProps) => <code {...props} />,
 
   // Custom components
@@ -32,12 +39,12 @@ export const mdxComponents = {
   CalloutBox,
   YouTube: YoutubeEmbed,
   TSCodeBlock,
-  SmartCodeBlock,
+  // SmartPre,
 
   // Image,
   h1: ({ children, ...props }: ComponentProps) => (
     <h1
-      className="mt-4 mb-3 text-2xl font-bold text-slate-900 dark:text-slate-50"
+      className="mt-4 mb-1.5 text-2xl font-bold text-slate-900 dark:text-slate-50"
       {...props}
     >
       {children}
@@ -45,7 +52,7 @@ export const mdxComponents = {
   ),
   h2: ({ children, ...props }: ComponentProps) => (
     <h2
-      className="mt-7 mb-2 text-xl font-bold text-slate-800 dark:text-slate-100"
+      className="mt-4 mb-1.5 text-xl font-bold text-slate-800 dark:text-slate-100"
       {...props}
     >
       {children}
@@ -53,7 +60,7 @@ export const mdxComponents = {
   ),
   h3: ({ children, ...props }: ComponentProps) => (
     <h3
-      className="mt-5 mb-3 text-lg font-bold text-slate-800 dark:text-slate-100"
+      className="mt-4 mb-1.5 text-lg font-bold text-slate-800 dark:text-slate-100"
       {...props}
     >
       {children}
@@ -61,7 +68,7 @@ export const mdxComponents = {
   ),
   h4: ({ children, ...props }: ComponentProps) => (
     <h4
-      className="mt-5 mb-2 text-md font-semibold text-slate-800 dark:text-slate-200"
+      className="mt-4 mb-1.5 text-md font-semibold text-slate-800 dark:text-slate-200"
       {...props}
     >
       {children}
@@ -98,14 +105,14 @@ export const mdxComponents = {
   ),
   blockquote: ({ children, ...props }: ComponentProps) => (
     <blockquote
-      className="my-4 border-l-4 border-slate-300 dark:border-slate-700 pl-4 text-slate-700 dark:text-slate-300 italic"
+      className="my-3 border-l-4 border-slate-300 dark:border-slate-700 pl-4 text-slate-700 dark:text-slate-300 italic"
       {...props}
     >
       {children}
     </blockquote>
   ),
   hr: (props: ComponentProps) => (
-    <hr className="my-6 border-slate-300 dark:border-slate-700" {...props} />
+    <hr className="my-3 border-slate-300 dark:border-slate-700" {...props} />
   ),
   table: ({ children, ...props }: ComponentProps) => (
     <div className="mb-6 overflow-x-auto">
@@ -166,17 +173,36 @@ export const mdxComponents = {
   ),
 };
 
-// Define MDX options for server-side compilation
-export const mdxOptions = {
-  remarkPlugins: [
-    // Additional remark plugins added here
-    remarkGfm,
-  ],
-  rehypePlugins: [
-    // Additional rehype plugins added here
-    rehypeSlug,
-    rehypeHighlight,
-  ],
+// TODO: Use
+export const mdxOptions: MDXRemoteProps["options"] = {
+  mdxOptions: {
+    remarkPlugins: [
+      // Additional remark plugins added here
+      remarkGfm,
+    ],
+    rehypePlugins: [
+      // Additional rehype plugins added here
+      rehypeSlug,
+      [
+        rehypeShiki,
+        {
+          themes: {
+            light: "github-light",
+            dark: "dracula",
+          },
+          inline: "tailing-curly-colon",
+          highlightClassName: "highlighted-line",
+          languageTextMap: (lang: string) => lang,
+          transformers: [
+            transformerNotationDiff(),
+            transformerNotationHighlight(),
+            transformerNotationFocus(),
+            transformerNotationWordHighlight(),
+          ],
+        },
+      ],
+    ],
+  },
 };
 
 export {
@@ -187,6 +213,5 @@ export {
   CalloutBox,
   YoutubeEmbed,
   TSCodeBlock,
-  SmartCodeBlock,
-  Pre,
+  SmartPre,
 };

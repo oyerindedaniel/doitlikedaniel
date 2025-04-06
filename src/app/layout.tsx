@@ -1,19 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-// import "highlight.js/styles/github.css";
+
 import Header from "@/components/header";
 import { ThemeProvider } from "@/components/theme-provider";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import { ScrollToTop } from "@/components/ui/scroll-to-top";
+import { fontVariables } from "@/assets/fonts";
 
 export const metadata: Metadata = {
   title: "Daniel's Personal Site",
@@ -36,7 +27,7 @@ export default function RootLayout({
         <script src="https://unpkg.com/react-scan/dist/auto.global.js" async />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col font-mono`}
+        className={`${fontVariables} antialiased min-h-screen flex flex-col font-manrope overflow-x-hidden`}
       >
         <ThemeProvider>
           <Header />
@@ -46,6 +37,7 @@ export default function RootLayout({
               © {new Date().getFullYear()} Daniel • All rights reserved
             </div> */}
           </footer>
+          <ScrollToTop tooltipText="Back to top" />
         </ThemeProvider>
       </body>
     </html>

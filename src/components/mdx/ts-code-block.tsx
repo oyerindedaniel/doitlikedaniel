@@ -2,9 +2,9 @@
 
 import React, { useId } from "react";
 import { TypeScriptEditor } from "./typescript-editor";
-import { Button } from "@/components/ui/button";
 import logger from "@/utils/logger";
 import { formatTsCode } from "@/utils/code";
+import { CopyCodeButton } from "../copy-code-button";
 
 export interface TSCodeBlockProps {
   children: string;
@@ -57,7 +57,6 @@ export function TSCodeBlock({
   }, [children, filename, blockId]);
 
   const [code, setCode] = React.useState(formattedCode);
-  const [isCopied, setIsCopied] = React.useState(false);
 
   React.useEffect(() => {
     setCode(formattedCode);
@@ -68,7 +67,7 @@ export function TSCodeBlock({
   };
 
   return (
-    <div className="my-6" data-ts-block-id={blockId}>
+    <div className="my-3 group" data-ts-block-id={blockId}>
       <TypeScriptEditor
         code={code}
         editable={editable}
@@ -82,24 +81,10 @@ export function TSCodeBlock({
 
       {editable && (
         <div className="mt-2 text-right">
-          <Button
-            variant="gradient"
-            className="text-xs rounded px-3! py-1! w-fit h-fit"
-            size="sm"
-            onClick={() => {
-              try {
-                navigator.clipboard.writeText(code);
-                setIsCopied(true);
-                setTimeout(() => setIsCopied(false), 2000);
-              } catch (error) {
-                logger.error("Failed to copy code:", error);
-              }
-            }}
-          >
-            {isCopied ? "Copied!" : "Copy Code"}
-          </Button>
+          <CopyCodeButton code={code} />
         </div>
       )}
+      {!editable && <div aria-hidden className="mb-10" />}
     </div>
   );
 }

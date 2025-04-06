@@ -3,7 +3,7 @@
 import { ReactNode, ReactElement } from "react";
 import CodeBlock from "./code-block";
 import { TSCodeBlock } from "./ts-code-block";
-import { extractLanguage, extractRawCode } from "@/utils/code";
+import { extractLanguage, extractRawCode, isCodeBlock } from "@/utils/code";
 
 interface SmartCodeBlockProps {
   children: string;
@@ -13,11 +13,13 @@ interface SmartCodeBlockProps {
   height?: string | number;
 }
 
-interface CodeElementProps {
+export interface CodeElementProps {
   children?: string;
   className?: string;
   [key: string]: unknown;
 }
+
+// TODO: Improve this does not work right
 
 /**
  * A smart code block component that decides which code renderer to use
@@ -32,8 +34,6 @@ export function SmartCodeBlock({
 }: SmartCodeBlockProps) {
   // Get language from className (e.g., "language-typescript")
   const language = extractLanguage(className);
-
-  console.log("language", language);
 
   // Uses Monaco Editor for TypeScript and TSX
   if (language === "typescript" || language === "tsx") {
@@ -50,35 +50,25 @@ export function SmartCodeBlock({
   }
 
   // Uses standard code block for other languages
-  return (
-    <CodeBlock className={className} language={language}>
-      {children}
-    </CodeBlock>
-  );
+  return <CodeBlock className={className}>{children}</CodeBlock>;
 }
 
 /**
  * Custom Pre component for MDX that handles code blocks intelligently
  */
-export function Pre({
+export function SmartPre({
   children,
   className,
+  editable = false,
   ...props
 }: {
   children: ReactNode;
   className?: string;
+  editable?: boolean;
   [key: string]: unknown;
 }) {
-  // Check if this is a code block with a child <code> element
-  const isCodeBlock =
-    children &&
-    typeof children === "object" &&
-    children !== null &&
-    "type" in (children as ReactElement) &&
-    (children as ReactElement).type === "code";
-
   // If not a code block, render as normal pre
-  if (!isCodeBlock) {
+  if (!isCodeBlock(children)) {
     return (
       <pre className={className} {...props}>
         {children}
@@ -100,7 +90,7 @@ export function Pre({
     <SmartCodeBlock
       className={codeClassName}
       filename={filename}
-      editable={false}
+      editable={editable}
     >
       {codeString}
     </SmartCodeBlock>
