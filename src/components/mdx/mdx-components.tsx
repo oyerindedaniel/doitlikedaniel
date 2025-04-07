@@ -192,7 +192,7 @@ export const mdxOptions: MDXRemoteProps["options"] = {
           },
           inline: "tailing-curly-colon",
           highlightClassName: "highlighted-line",
-          languageTextMap: (lang: string) => lang,
+          // languageTextMap: (lang: string) => lang,
           transformers: [
             transformerNotationDiff(),
             transformerNotationHighlight(),

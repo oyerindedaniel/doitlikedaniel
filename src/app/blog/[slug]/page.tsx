@@ -9,7 +9,7 @@ import { TableOfContents } from "@/components/mdx/table-of-contents";
 import { Button } from "@/components/ui/button";
 import { ReadingProgress } from "@/components/mdx/reading-progress";
 import { MetaItem } from "@/components/ui/meta-item";
-import logger from "@/utils/logger";
+import { NotFoundError, SystemError, logError } from "@/utils/errors";
 
 export async function generateMetadata({
   params,
@@ -29,10 +29,30 @@ export async function generateMetadata({
         ...(meta.coverImage && { images: [{ url: meta.coverImage }] }),
       },
     };
-  } catch {
+  } catch (error) {
+    if (error instanceof NotFoundError) {
+      return {
+        title: "Post Not Found",
+        description: "The post you are looking for does not exist",
+      };
+    }
+
+    if (error instanceof SystemError) {
+      logError(error);
+    } else if (error instanceof Error) {
+      logError(
+        new SystemError("Error generating metadata", {
+          data: {
+            originalError: error,
+          },
+        })
+      );
+    }
+
+    // Fallback metadata
     return {
-      title: "Post Not Found",
-      description: "The post you are looking for does not exist",
+      title: "Error Loading Post",
+      description: "There was an error loading this blog post",
     };
   }
 }
@@ -227,7 +247,26 @@ export default async function BlogPostPage({
       </div>
     );
   } catch (error) {
-    logger.error("Error in BlogPostPage:", error);
+    if (error instanceof NotFoundError) {
+      const searchParams = new URLSearchParams();
+      searchParams.set("resource", error.data.resource);
+      if (error.data.id) searchParams.set("id", error.data.id);
+      notFound();
+    }
+
+    if (error instanceof SystemError) {
+      logError(error);
+    } else if (error instanceof Error) {
+      logError(
+        new SystemError("Error in BlogPostPage", {
+          data: {
+            originalError: error,
+            context: { slug: params.slug },
+          },
+        })
+      );
+    }
+
     notFound();
   }
 }

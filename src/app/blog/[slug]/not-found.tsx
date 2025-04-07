@@ -1,7 +1,35 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { headers } from "next/headers";
+import logger from "@/utils/logger";
 
-export default function NotFound() {
+async function getErrorParams() {
+  try {
+    const headersList = await headers();
+    const referer = headersList.get("referer") || "";
+
+    try {
+      const url = new URL(referer);
+      return {
+        resource: url.searchParams.get("resource") || "Post",
+        id: url.searchParams.get("id") || "",
+        message: url.searchParams.get("message") || "",
+      };
+    } catch {
+      return { resource: "Post", id: "", message: "" };
+    }
+  } catch (error) {
+    logger.error("Error getting error params:", error);
+    return { resource: "Post", id: "", message: "" };
+  }
+}
+
+export default async function NotFound() {
+  const { resource, id, message } = await getErrorParams();
+  const displayMessage =
+    message ||
+    `The ${resource.toLowerCase()}${id ? ` with ID "${id}"` : ""} could not be found.`;
+
   return (
     <div className="container mx-auto px-4 py-24">
       <div className="max-w-md mx-auto text-center">
@@ -26,13 +54,14 @@ export default function NotFound() {
           </div>
 
           <h2 className="mb-3 text-2xl font-bold text-slate-900 dark:text-white">
-            Post Not Found
+            {resource} Not Found
           </h2>
 
-          <p className="mb-6 text-sm text-slate-600 dark:text-slate-400">
-            The blog post you&apos;re looking for doesn&apos;t exist or has been
-            moved.
-          </p>
+          {displayMessage && (
+            <p className="mb-6 text-sm text-slate-600 dark:text-slate-400">
+              {displayMessage}
+            </p>
+          )}
 
           <Button variant="gradient" asChild>
             <Link href="/blog" className="inline-flex items-center">

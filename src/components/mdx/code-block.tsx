@@ -20,6 +20,13 @@ export default function CodeBlock({
         )
       : "code";
 
+  console.log({
+    children,
+    className,
+    style,
+    ...props,
+  });
+
   return (
     <div className="group relative overflow-hidden rounded-md my-3">
       {/* Language badge */}
