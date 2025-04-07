@@ -99,7 +99,7 @@ export function FeaturedCard({ post }: FeaturedPostProps) {
             </Link>
           </h2>
 
-          <p className="mb-4 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+          <p className="mb-3 text-sm leading-relaxed line-clamp-3 text-gray-600 dark:text-gray-400">
             {post.excerpt}
           </p>
 

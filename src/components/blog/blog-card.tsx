@@ -96,7 +96,7 @@ export default function BlogPost({ post }: BlogPostProps) {
           </h2>
 
           {/* Excerpt */}
-          <p className="mb-3 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+          <p className="mb-3 text-sm leading-relaxed line-clamp-3 text-gray-600 dark:text-gray-400">
             {post.excerpt}
           </p>
 

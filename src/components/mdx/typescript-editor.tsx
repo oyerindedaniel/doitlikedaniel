@@ -1,11 +1,22 @@
 "use client";
 
 import React, { useRef, useState, useEffect, useId } from "react";
-import Editor, { OnMount } from "@monaco-editor/react";
+import type { OnMount } from "@monaco-editor/react";
 import type * as Monaco from "monaco-editor";
 import { cn } from "@/lib/utils";
 import { useMonacoTheme } from "@/hooks/use-monaco-theme";
 import logger from "@/utils/logger";
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
+import { MonacoLoader } from "../monaco-loader";
+
+const Editor = dynamic(
+  () => import("@monaco-editor/react").then((mod) => mod.Editor),
+  {
+    loading: () => <MonacoLoader height="300px" />,
+    ssr: false,
+  }
+);
 
 export interface TypeScriptEditorProps {
   code: string;
@@ -20,7 +31,7 @@ export interface TypeScriptEditorProps {
   instanceId?: string;
 }
 
-export function TypeScriptEditor({
+function TypeScriptEditorPre({
   code,
   editable = false,
   height = "300px",
@@ -171,7 +182,16 @@ export function TypeScriptEditor({
         onMount={handleEditorMount}
         className="monaco-editor-container"
         path={modelUri}
+        loading={<MonacoLoader height={height} />}
       />
     </div>
   );
 }
+
+export const TypeScriptEditor = (props: TypeScriptEditorProps) => {
+  return (
+    <Suspense fallback={<MonacoLoader height={props.height} />}>
+      <TypeScriptEditorPre {...props} />
+    </Suspense>
+  );
+};

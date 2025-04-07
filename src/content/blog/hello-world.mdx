@@ -72,6 +72,8 @@ You can even make the editor interactive, allowing you to edit and experiment wi
 
 class TodoItem<T> {
 private \_completed: boolean = false;
+private \_createdAt: Date = new Date();
+private \_completedAt: Date | null = null;
 
 constructor(
 public id: number,
@@ -84,8 +86,17 @@ get completed(): boolean {
 return this.\_completed;
 }
 
+get createdAt(): Date {
+return this.\_createdAt;
+}
+
+get completedAt(): Date | null {
+return this.\_completedAt;
+}
+
 complete(): void {
 this.\_completed = true;
+this.\_completedAt = new Date();
 }
 
 toJSON() {
@@ -94,7 +105,15 @@ id: this.id,
 title: this.title,
 description: this.description,
 completed: this.\_completed,
-metadata: this.metadata
+createdAt: this.\_createdAt.toISOString(),
+completedAt: this.\_completedAt ? this.\_completedAt.toISOString() : null,
+metadata: this.metadata,
+formattedDate: this.\_createdAt.toLocaleDateString('en-US', {
+weekday: 'long',
+year: 'numeric',
+month: 'long',
+day: 'numeric'
+})
 };
 }
 }

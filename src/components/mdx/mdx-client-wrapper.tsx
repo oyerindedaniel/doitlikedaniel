@@ -6,7 +6,7 @@ import { Alert } from "./alert";
 import { CalloutBox } from "./callout-box";
 import { YoutubeEmbed } from "./youtube-embed";
 import { TSCodeBlock } from "./ts-code-block";
-import { SmartCodeBlock, Pre } from "./smart-code-block";
+import { SmartCodeBlock, SmartPre } from "./smart-code-block";
 
 /**
  * Client-side wrapper component for MDX content
