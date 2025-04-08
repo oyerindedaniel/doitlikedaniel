@@ -1,14 +1,17 @@
 import { mkErrClass } from "@/utils/error/mk-err-class";
-import logger from "./logger";
 
 type NotFoundErrorData = {
   resource: string;
   id?: string;
 };
 
-type SystemErrorData = {
+export type SystemErrorData = {
   originalError?: Error;
-  context?: Record<string, unknown>;
+  context?: {
+    userId?: string;
+    action?: string;
+    metadata?: Record<string, unknown>;
+  };
 };
 
 /**
@@ -53,58 +56,9 @@ export function isSystemError(error: unknown): error is SystemErrorType {
   return error instanceof Error && error.name === "SystemError";
 }
 
-export function logError(error: Error): void {
-  const isProduction = process.env.NODE_ENV === "production";
-
-  if (isProduction) {
-    try {
-      if (typeof window !== "undefined") {
-        import("@/lib/posthog").then(({ PostHog }) => {
-          const errorProps: Record<string, unknown> = {
-            errorName: error.name,
-            errorMessage: error.message,
-          };
-
-          if (isSystemError(error)) {
-            if (error.data.originalError) {
-              errorProps.originalErrorName = error.data.originalError.name;
-              errorProps.originalErrorMessage =
-                error.data.originalError.message;
-            }
-
-            if (error.data.context) {
-              errorProps.context = error.data.context;
-            }
-          }
-
-          PostHog.capture("error", errorProps);
-        });
-      }
-    } catch (e) {
-      logger.debug("Failed to log to PostHog:", e);
-    }
-
-    if (!isSystemError(error)) {
-      logger.error(`[${error.name}] ${error.message}`);
-    }
-  } else {
-    logger.error("=============================================");
-    logger.error(`[${error.name}] ${error.message}`);
-
-    if (isSystemError(error)) {
-      if (error.data.originalError) {
-        logger.error("\nOriginal error:");
-        logger.error(error.data.originalError);
-      }
-
-      if (error.data.context) {
-        logger.error("\nContext:");
-        logger.error(error.data.context);
-      }
-    }
-
-    logger.error("\nStack trace:");
-    logger.error(error.stack);
-    logger.error("=============================================");
+export function normalizeError(error: unknown): Error {
+  if (error instanceof Error) {
+    return error;
   }
+  return new Error(String(error));
 }

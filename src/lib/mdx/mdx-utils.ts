@@ -3,8 +3,14 @@ import path from "path";
 import matter from "gray-matter";
 import { format } from "date-fns";
 import { PostMeta, PostWithContent } from "@/types/mdx";
-import { NotFoundError, SystemError, logError } from "@/utils/errors";
+import {
+  isNotFoundError,
+  isSystemError,
+  NotFoundError,
+  SystemError,
+} from "@/utils/errors";
 import logger from "@/utils/logger";
+import { normalizeError } from "@/utils/errors";
 
 const BLOG_DIR = path.join(process.cwd(), "src/content/blog");
 
@@ -53,14 +59,11 @@ export const getAllPosts = (): PostMeta[] => {
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
   } catch (error) {
-    const systemError = new SystemError("Failed to get all posts", {
+    throw new SystemError("Failed to get all posts", {
       data: {
-        originalError:
-          error instanceof Error ? error : new Error(String(error)),
+        originalError: normalizeError(error),
       },
     });
-    logError(systemError);
-    return [];
   }
 };
 
@@ -86,8 +89,10 @@ export const getPostBySlug = (slug: string): PostWithContent => {
       throw new SystemError(`Invalid post data for '${slug}': missing title`, {
         data: {
           context: {
-            slug,
-            path: fullPath,
+            metadata: {
+              slug,
+              path: fullPath,
+            },
           },
         },
       });
@@ -109,16 +114,14 @@ export const getPostBySlug = (slug: string): PostWithContent => {
       content,
     };
   } catch (error) {
-    if (error instanceof NotFoundError) {
+    if (isNotFoundError(error) || isSystemError(error)) {
       throw error;
     }
 
-    const errorMessage = error instanceof Error ? error.message : String(error);
-
-    throw new SystemError(`Error getting post '${slug}': ${errorMessage}`, {
+    throw new SystemError(`Error getting post '${slug}'`, {
       data: {
-        originalError: error instanceof Error ? error : undefined,
-        context: { slug },
+        originalError: normalizeError(error),
+        context: { metadata: { slug } },
       },
     });
   }

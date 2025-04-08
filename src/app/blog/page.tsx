@@ -3,7 +3,8 @@ import { Metadata } from "next";
 import BlogPost from "@/components/blog/blog-card";
 import BlogHeader from "@/components/blog/blog-header";
 import { FeaturedCard } from "@/components/blog/featured-card";
-import { SystemError, logError } from "@/utils/errors";
+import { isSystemError, normalizeError, SystemError } from "@/utils/errors";
+import { logServerError } from "@/lib/telemetry/posthog.server";
 
 export const metadata: Metadata = {
   title: "Blog | Daniel's Personal Site",
@@ -56,21 +57,18 @@ export default function BlogPage() {
       </>
     );
   } catch (error) {
-    if (error instanceof Error) {
-      logError(
-        new SystemError("Error loading blog posts", {
-          data: {
-            originalError: error,
-          },
-        })
-      );
-    } else {
-      logError(
-        new SystemError("Unknown error loading blog posts", {
-          data: {},
-        })
-      );
-    }
+    const normalizedError =
+      error instanceof Error
+        ? isSystemError(error)
+          ? error
+          : new SystemError("Error loading blog posts", {
+              data: { originalError: error },
+            })
+        : new SystemError("Unknown error loading blog posts", {
+            data: { originalError: normalizeError(error) },
+          });
+
+    logServerError(normalizedError);
 
     return (
       <>

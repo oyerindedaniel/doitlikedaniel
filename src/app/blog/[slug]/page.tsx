@@ -9,7 +9,14 @@ import { TableOfContents } from "@/components/mdx/table-of-contents";
 import { Button } from "@/components/ui/button";
 import { ReadingProgress } from "@/components/mdx/reading-progress";
 import { MetaItem } from "@/components/ui/meta-item";
-import { NotFoundError, SystemError, logError } from "@/utils/errors";
+import {
+  isNotFoundError,
+  isSystemError,
+  normalizeError,
+  NotFoundError,
+  SystemError,
+} from "@/utils/errors";
+import { logServerError } from "@/lib/telemetry/posthog.server";
 
 export async function generateMetadata({
   params,
@@ -38,9 +45,9 @@ export async function generateMetadata({
     }
 
     if (error instanceof SystemError) {
-      logError(error);
+      logServerError(error);
     } else if (error instanceof Error) {
-      logError(
+      logServerError(
         new SystemError("Error generating metadata", {
           data: {
             originalError: error,
@@ -56,6 +63,8 @@ export async function generateMetadata({
     };
   }
 }
+
+export const dynamicParams = true;
 
 export function generateStaticParams() {
   const posts = getAllPosts();
@@ -247,25 +256,39 @@ export default async function BlogPostPage({
       </div>
     );
   } catch (error) {
-    if (error instanceof NotFoundError) {
+    if (isNotFoundError(error)) {
       const searchParams = new URLSearchParams();
       searchParams.set("resource", error.data.resource);
       if (error.data.id) searchParams.set("id", error.data.id);
       notFound();
     }
 
-    if (error instanceof SystemError) {
-      logError(error);
-    } else if (error instanceof Error) {
-      logError(
-        new SystemError("Error in BlogPostPage", {
-          data: {
-            originalError: error,
-            context: { slug: params.slug },
-          },
-        })
-      );
-    }
+    const normalizedError =
+      isSystemError(error)
+        ? error
+        : error instanceof Error
+          ? new SystemError("Error in BlogPostPage", {
+              data: {
+                originalError: error,
+                context: {
+                  metadata: {
+                    slug: params.slug,
+                  },
+                },
+              },
+            })
+          : new SystemError("Unknown error in BlogPostPage", {
+              data: {
+                originalError: normalizeError(error),
+                context: {
+                  metadata: {
+                    slug: params.slug,
+                  },
+                },
+              },
+            });
+
+    logServerError(normalizedError);
 
     notFound();
   }

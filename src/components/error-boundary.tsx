@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect } from "react";
-import { isSystemError, logError } from "@/utils/errors";
+import { isSystemError } from "@/utils/errors";
+import { logClientError } from "@/lib/telemetry/posthog";
+import { Button } from "@/components/ui/button";
 
 interface ErrorBoundaryProps {
   error: Error;
@@ -10,7 +12,7 @@ interface ErrorBoundaryProps {
 
 export default function ErrorBoundary({ error, reset }: ErrorBoundaryProps) {
   useEffect(() => {
-    logError(error);
+    logClientError(error);
   }, [error]);
 
   const errorMessage = isSystemError(error)
@@ -28,19 +30,19 @@ export default function ErrorBoundary({ error, reset }: ErrorBoundaryProps) {
           <p className="text-red-700 dark:text-red-300 mb-6">{errorMessage}</p>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
-            <button
+            <Button
               onClick={() => (window.location.href = "/")}
               className="rounded-md bg-slate-100 dark:bg-slate-800 px-4 py-2 text-sm font-medium text-slate-900 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-500"
             >
               Go home
-            </button>
+            </Button>
 
-            <button
+            <Button
               onClick={reset}
               className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
             >
               Try again
-            </button>
+            </Button>
           </div>
         </div>
       </div>
