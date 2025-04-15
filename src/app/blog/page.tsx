@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import BlogPost from "@/components/blog/blog-card";
 import BlogHeader from "@/components/blog/blog-header";
 import { FeaturedCard } from "@/components/blog/featured-card";
-import { isSystemError, normalizeError, SystemError } from "@/utils/errors";
+import { isSystemError, normalizeAppError, SystemError } from "@/utils/errors";
 import { logServerError } from "@/lib/telemetry/posthog.server";
 
 export const metadata: Metadata = {
@@ -65,7 +65,7 @@ export default function BlogPage() {
               data: { originalError: error },
             })
         : new SystemError("Unknown error loading blog posts", {
-            data: { originalError: normalizeError(error) },
+            data: { originalError: normalizeAppError(error) },
           });
 
     logServerError(normalizedError);

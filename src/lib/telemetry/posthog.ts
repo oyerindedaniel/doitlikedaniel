@@ -1,10 +1,11 @@
 "use client";
 
 import { isProduction } from "@/config/app";
-import { SystemErrorData } from "@/utils/errors";
+import { SystemErrorType } from "@/utils/errors";
 import logger from "@/utils/logger";
 import posthog from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
+import { serializeSystemError } from "@/utils/errors";
 
 type PageViewContext = {
   $current_url: string;
@@ -45,25 +46,24 @@ export function capturePageView(url: string, context?: PageViewContext) {
 /**
  * Log a client error event to PostHog
  */
-export function logClientError(
-  error: Error,
-  context?: SystemErrorData["context"]
-) {
+export function logClientError(error: SystemErrorType) {
   if (!isProduction || !posthog) return;
 
+  // TODO: consider adding a group 
   try {
     posthog.capture("client_error", {
       error: {
         name: error.name,
         message: error.message,
         stack: error.stack,
-        ...context,
-        metadata: context?.metadata || {},
+        ...serializeSystemError(error.data),
       },
+      timestamp: new Date().toISOString(),
       environment: process.env.NODE_ENV,
     });
-  } catch (e) {
-    logger.error("Failed to log client error to PostHog:", e);
+  } catch (posthogError) {
+    logger.error("Failed to log client error to PostHog:", posthogError);
+    logger.error("Original error:", error);
   }
 }
 

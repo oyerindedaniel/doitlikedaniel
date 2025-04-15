@@ -56,9 +56,25 @@ export function isSystemError(error: unknown): error is SystemErrorType {
   return error instanceof Error && error.name === "SystemError";
 }
 
-export function normalizeError(error: unknown): Error {
+export function normalizeAppError(error: unknown): Error {
   if (error instanceof Error) {
     return error;
   }
   return new Error(String(error));
+}
+
+export function serializeSystemError(error: SystemErrorData) {
+  if (!error || !isSystemError(error)) return {};
+
+  return {
+    originalError: {
+      name: error.originalError?.name,
+      message: error.originalError?.message,
+      stack: error.originalError?.stack,
+      ...(error.context && {
+        ...error.context,
+        metadata: error.context.metadata || {},
+      }),
+    },
+  };
 }

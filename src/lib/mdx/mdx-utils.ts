@@ -10,7 +10,7 @@ import {
   SystemError,
 } from "@/utils/errors";
 import logger from "@/utils/logger";
-import { normalizeError } from "@/utils/errors";
+import { normalizeAppError } from "@/utils/errors";
 
 const BLOG_DIR = path.join(process.cwd(), "src/content/blog");
 
@@ -61,7 +61,7 @@ export const getAllPosts = (): PostMeta[] => {
   } catch (error) {
     throw new SystemError("Failed to get all posts", {
       data: {
-        originalError: normalizeError(error),
+        originalError: normalizeAppError(error),
       },
     });
   }
@@ -120,7 +120,7 @@ export const getPostBySlug = (slug: string): PostWithContent => {
 
     throw new SystemError(`Error getting post '${slug}'`, {
       data: {
-        originalError: normalizeError(error),
+        originalError: normalizeAppError(error),
         context: { metadata: { slug } },
       },
     });

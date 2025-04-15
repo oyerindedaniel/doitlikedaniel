@@ -12,8 +12,7 @@ import { MetaItem } from "@/components/ui/meta-item";
 import {
   isNotFoundError,
   isSystemError,
-  normalizeError,
-  NotFoundError,
+  normalizeAppError,
   SystemError,
 } from "@/utils/errors";
 import { logServerError } from "@/lib/telemetry/posthog.server";
@@ -37,14 +36,14 @@ export async function generateMetadata({
       },
     };
   } catch (error) {
-    if (error instanceof NotFoundError) {
+    if (isNotFoundError(error)) {
       return {
         title: "Post Not Found",
         description: "The post you are looking for does not exist",
       };
     }
 
-    if (error instanceof SystemError) {
+    if (isSystemError(error)) {
       logServerError(error);
     } else if (error instanceof Error) {
       logServerError(
@@ -118,9 +117,9 @@ export default async function BlogPostPage({
           {/* Main content - centered */}
           <div className="col-span-12 lg:col-span-8 px-4">
             {/* Post header */}
-            <header className="mb-10">
+            <header className="mb-6">
               {/* Meta information */}
-              <div className="mb-4 flex flex-wrap items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
+              <div className="mb-2 flex flex-wrap items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
                 {/* Date with icon */}
                 <MetaItem
                   icon={
@@ -201,13 +200,13 @@ export default async function BlogPostPage({
               </div>
 
               {/* Title */}
-              <h1 className="mb-4 text-2xl font-bold leading-snug text-slate-900 dark:text-white sm:text-3xl">
+              <h1 className="mb-2 text-3xl font-normal leading-snug text-slate-900 dark:text-white sm:text-3xl">
                 {meta.title}
               </h1>
 
               {/* Tags */}
               {meta.tags && meta.tags.length > 0 && (
-                <div className="mb-6 flex flex-wrap gap-1.5">
+                <div className="mb-4 flex flex-wrap gap-1.5">
                   {meta.tags.map((tag: string) => (
                     <Badge
                       key={tag}
@@ -223,7 +222,7 @@ export default async function BlogPostPage({
 
               {/* Cover image */}
               {meta.coverImage && (
-                <div className="relative mb-8 aspect-[3/2] rounded-sm overflow-hidden">
+                <div className="relative mb-4 aspect-[3/2] rounded-sm overflow-hidden">
                   <Image
                     src={meta.coverImage}
                     alt={meta.title}
@@ -263,30 +262,29 @@ export default async function BlogPostPage({
       notFound();
     }
 
-    const normalizedError =
-      isSystemError(error)
-        ? error
-        : error instanceof Error
-          ? new SystemError("Error in BlogPostPage", {
-              data: {
-                originalError: error,
-                context: {
-                  metadata: {
-                    slug: params.slug,
-                  },
+    const normalizedError = isSystemError(error)
+      ? error
+      : error instanceof Error
+        ? new SystemError("Error in BlogPostPage", {
+            data: {
+              originalError: error,
+              context: {
+                metadata: {
+                  slug: params.slug,
                 },
               },
-            })
-          : new SystemError("Unknown error in BlogPostPage", {
-              data: {
-                originalError: normalizeError(error),
-                context: {
-                  metadata: {
-                    slug: params.slug,
-                  },
+            },
+          })
+        : new SystemError("Unknown error in BlogPostPage", {
+            data: {
+              originalError: normalizeAppError(error),
+              context: {
+                metadata: {
+                  slug: params.slug,
                 },
               },
-            });
+            },
+          });
 
     logServerError(normalizedError);
 
