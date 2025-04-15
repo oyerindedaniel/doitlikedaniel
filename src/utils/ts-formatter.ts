@@ -5,6 +5,9 @@ import prettier from "prettier/standalone";
 import typescriptParser from "prettier/parser-typescript";
 import estreePlugin from "prettier/plugins/estree";
 import logger from "./logger";
+import { normalizeAppError } from "./errors";
+import { logClientError } from "@/lib/telemetry/posthog";
+import { SystemError } from "./errors";
 
 /**
  * Format TypeScript code using Prettier async API
@@ -29,6 +32,13 @@ export async function formatTsCode(code: string): Promise<string> {
     });
   } catch (error) {
     logger.error("Error formatting TypeScript code:", error);
+    logClientError(
+      new SystemError("Error formatting code", {
+        data: {
+          originalError: normalizeAppError(error),
+        },
+      })
+    );
     return code;
   }
 }

@@ -7,6 +7,7 @@ import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import { fontVariables } from "@/assets/fonts";
 import { PHProvider } from "@/app/ph-provider";
 import SuspendedPostHogPageView from "@/app/ph-page-view";
+import { isProduction } from "@/config/app";
 
 export const metadata: Metadata = {
   title: "Daniel's Personal Site",
@@ -26,7 +27,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <script src="https://unpkg.com/react-scan/dist/auto.global.js" async />
+        {!isProduction && (
+          <script
+            src="https://unpkg.com/react-scan/dist/auto.global.js"
+            async
+          />
+        )}
       </head>
       <body
         className={`${fontVariables} antialiased min-h-screen flex flex-col font-inter overflow-x-hidden`}
