@@ -68,9 +68,9 @@ export function serializeSystemError(error: SystemErrorData) {
 
   return {
     originalError: {
-      name: error.originalError?.name,
-      message: error.originalError?.message,
-      stack: error.originalError?.stack,
+      name: error.originalError?.name || "",
+      message: error.originalError?.message || "",
+      stack: error.originalError?.stack || "",
       ...(error.context && {
         ...error.context,
         metadata: error.context.metadata || {},
