@@ -5,8 +5,6 @@ import { TypeScriptEditor, TypeScriptEditorProps } from "./typescript-editor";
 import logger from "@/utils/logger";
 import { formatTsCode } from "@/utils/code";
 import { CopyCodeButton } from "../copy-code-button";
-import { logClientError } from "@/lib/telemetry/posthog";
-import { normalizeAppError, SystemError } from "@/utils/errors";
 
 export interface TSCodeBlockProps
   extends Pick<
@@ -54,7 +52,7 @@ export function TSCodeBlock({
 
         if (isMounted) {
           if (codeToFormat !== formatted) {
-            logger.debug(`Code was reformatted for ${filename}`, {
+            console.debug(`Code was reformatted for ${filename}`, {
               id: blockId,
               formatted: true,
             });
@@ -63,13 +61,7 @@ export function TSCodeBlock({
         }
       } catch (error) {
         logger.error("Error formatting code:", error);
-        logClientError(
-          new SystemError("Error formatting code", {
-            data: {
-              originalError: normalizeAppError(error),
-            },
-          })
-        );
+
         if (isMounted) {
           setCode(typeof children === "string" ? children.trim() : "");
         }
