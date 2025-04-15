@@ -44,7 +44,7 @@ export const mdxComponents = {
   // Image,
   h1: ({ children, ...props }: ComponentProps) => (
     <h1
-      className="mt-4 mb-1.5 text-2xl font-bold text-slate-900 dark:text-slate-50"
+      className="mt-4 mb-1.5 text-2xl font-normal  text-slate-900 dark:text-slate-50"
       {...props}
     >
       {children}
@@ -52,7 +52,7 @@ export const mdxComponents = {
   ),
   h2: ({ children, ...props }: ComponentProps) => (
     <h2
-      className="mt-4 mb-1.5 text-xl font-bold text-slate-800 dark:text-slate-100"
+      className="mt-4 mb-1.5 text-xl font-normal  text-slate-800 dark:text-slate-100"
       {...props}
     >
       {children}
@@ -60,7 +60,7 @@ export const mdxComponents = {
   ),
   h3: ({ children, ...props }: ComponentProps) => (
     <h3
-      className="mt-4 mb-1.5 text-lg font-bold text-slate-800 dark:text-slate-100"
+      className="mt-4 mb-1.5 text-lg font-normal  text-slate-800 dark:text-slate-100"
       {...props}
     >
       {children}
@@ -68,7 +68,7 @@ export const mdxComponents = {
   ),
   h4: ({ children, ...props }: ComponentProps) => (
     <h4
-      className="mt-4 mb-1.5 text-md font-semibold text-slate-800 dark:text-slate-200"
+      className="mt-4 mb-1.5 text-md font-normal text-slate-800 dark:text-slate-200"
       {...props}
     >
       {children}
@@ -76,7 +76,7 @@ export const mdxComponents = {
   ),
   p: ({ children, ...props }: ComponentProps) => (
     <p
-      className="mb-2 text-slate-700 dark:text-slate-300 leading-relaxed"
+      className="mb-2 text-slate-700 text-[0.9rem] dark:text-slate-300 leading-relaxed"
       {...props}
     >
       {children}
@@ -192,7 +192,7 @@ export const mdxOptions: MDXRemoteProps["options"] = {
           },
           inline: "tailing-curly-colon",
           highlightClassName: "highlighted-line",
-          languageTextMap: (lang: string) => lang,
+          // languageTextMap: (lang: string) => lang,
           transformers: [
             transformerNotationDiff(),
             transformerNotationHighlight(),

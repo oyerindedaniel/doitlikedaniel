@@ -79,12 +79,9 @@ export function TSCodeBlock({
         instanceId={blockId}
       />
 
-      {editable && (
-        <div className="mt-2 text-right">
-          <CopyCodeButton code={code} />
-        </div>
-      )}
-      {!editable && <div aria-hidden className="mb-10" />}
+      <div className="mt-2 text-right">
+        <CopyCodeButton code={code} />
+      </div>
     </div>
   );
 }

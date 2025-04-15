@@ -155,8 +155,8 @@
   h4,
   h5,
   h6 {
-    font-family: var(--font-inter);
-    font-weight: bold;
+    font-family: var(--font-serif);
+    /* font-weight: bold; */
   }
 }
 

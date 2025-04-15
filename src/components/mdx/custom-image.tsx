@@ -20,7 +20,6 @@ export default function CustomImage({
     // eslint-disable-next-line @next/next/no-img-element
     return <img src={src} alt={alt || "Blog image"} {...props} />;
   }
-  console.log("src", src, width, height);
 
   // For local images
   return (
