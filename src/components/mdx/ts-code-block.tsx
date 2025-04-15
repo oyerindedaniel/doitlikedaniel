@@ -1,18 +1,19 @@
 "use client";
 
 import React, { useId } from "react";
-import { TypeScriptEditor } from "./typescript-editor";
+import { TypeScriptEditor, TypeScriptEditorProps } from "./typescript-editor";
 import logger from "@/utils/logger";
 import { formatTsCode } from "@/utils/code";
 import { CopyCodeButton } from "../copy-code-button";
+import { logClientError } from "@/lib/telemetry/posthog";
+import { normalizeAppError, SystemError } from "@/utils/errors";
 
-export interface TSCodeBlockProps {
+export interface TSCodeBlockProps
+  extends Pick<
+    TypeScriptEditorProps,
+    "editable" | "height" | "showLineNumbers" | "minimap" | "filename"
+  > {
   children: string;
-  filename?: string;
-  editable?: boolean;
-  height?: string | number;
-  showLineNumbers?: boolean;
-  minimap?: boolean;
   id?: string;
 }
 
@@ -27,6 +28,7 @@ export function TSCodeBlock({
 }: TSCodeBlockProps) {
   const generatedId = useId();
   const blockId = id || `ts-block-${generatedId}`;
+  const [code, setCode] = React.useState("");
 
   React.useEffect(() => {
     logger.debug(
@@ -38,33 +40,55 @@ export function TSCodeBlock({
     );
   }, [children, filename, blockId]);
 
-  const formattedCode = React.useMemo(() => {
-    let codeToFormat = typeof children === "string" ? children.trim() : "";
+  React.useEffect(() => {
+    let isMounted = true;
 
-    // Handle potential escape sequences in MDX (like \_)
-    codeToFormat = codeToFormat.replace(/\\([_])/g, "$1");
+    async function formatCode() {
+      try {
+        let codeToFormat = typeof children === "string" ? children.trim() : "";
 
-    const formatted = formatTsCode(codeToFormat);
+        // Handle potential escape sequences in MDX (like \_)
+        codeToFormat = codeToFormat.replace(/\\([_])/g, "$1");
 
-    if (codeToFormat !== formatted) {
-      logger.debug(`Code was reformatted for ${filename}`, {
-        id: blockId,
-        formatted: true,
-      });
+        const formatted = await formatTsCode(codeToFormat);
+
+        if (isMounted) {
+          if (codeToFormat !== formatted) {
+            logger.debug(`Code was reformatted for ${filename}`, {
+              id: blockId,
+              formatted: true,
+            });
+          }
+          setCode(formatted);
+        }
+      } catch (error) {
+        logger.error("Error formatting code:", error);
+        logClientError(
+          new SystemError("Error formatting code", {
+            data: {
+              originalError: normalizeAppError(error),
+            },
+          })
+        );
+        if (isMounted) {
+          setCode(typeof children === "string" ? children.trim() : "");
+        }
+      }
     }
 
-    return formatted;
+    formatCode();
+
+    return () => {
+      isMounted = false;
+    };
   }, [children, filename, blockId]);
 
-  const [code, setCode] = React.useState(formattedCode);
-
-  React.useEffect(() => {
-    setCode(formattedCode);
-  }, [formattedCode]);
-
-  const handleCodeChange = (newCode: string) => {
-    setCode(newCode);
-  };
+  const handleCodeChange = React.useCallback(
+    (newCode: string) => {
+      setCode(newCode);
+    },
+    [setCode]
+  );
 
   return (
     <div className="my-3 group" data-ts-block-id={blockId}>

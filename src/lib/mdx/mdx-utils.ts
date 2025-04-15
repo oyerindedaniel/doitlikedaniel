@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
-import { format } from "date-fns";
+import { format, isValid } from "date-fns";
 import { PostMeta, PostWithContent } from "@/types/mdx";
 import {
   isNotFoundError,
@@ -36,7 +36,9 @@ export const getAllPosts = (): PostMeta[] => {
           const { data } = matter(fileContents);
 
           const date = data.date
-            ? format(new Date(data.date), "MMMM dd, yyyy")
+            ? isValid(new Date(data.date))
+              ? format(new Date(data.date), "MMMM dd, yyyy")
+              : ""
             : "";
 
           return {

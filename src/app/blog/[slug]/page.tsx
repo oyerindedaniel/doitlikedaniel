@@ -75,7 +75,7 @@ export function generateStaticParams() {
 export default async function BlogPostPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
   try {
     const { slug } = await params;
@@ -259,8 +259,11 @@ export default async function BlogPostPage({
       const searchParams = new URLSearchParams();
       searchParams.set("resource", error.data.resource);
       if (error.data.id) searchParams.set("id", error.data.id);
+
       notFound();
     }
+
+    const slug = (await params).slug;
 
     const normalizedError = isSystemError(error)
       ? error
@@ -270,7 +273,7 @@ export default async function BlogPostPage({
               originalError: error,
               context: {
                 metadata: {
-                  slug: params.slug,
+                  slug,
                 },
               },
             },
@@ -280,7 +283,7 @@ export default async function BlogPostPage({
               originalError: normalizeAppError(error),
               context: {
                 metadata: {
-                  slug: params.slug,
+                  slug,
                 },
               },
             },
