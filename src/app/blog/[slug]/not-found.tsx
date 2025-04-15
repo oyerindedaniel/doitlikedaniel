@@ -1,31 +1,34 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { headers } from "next/headers";
-import logger from "@/utils/logger";
+// import { headers } from "next/headers";
+// import logger from "@/utils/logger";
 
-async function getErrorParams() {
-  try {
-    const headersList = await headers();
-    const referer = headersList.get("referer") || "";
+// async function getErrorParams() {
+//   try {
+//     const headersList = await headers();
+//     const referer = headersList.get("referer") || "";
 
-    try {
-      const url = new URL(referer);
-      return {
-        resource: url.searchParams.get("resource") || "Post",
-        id: url.searchParams.get("id") || "",
-        message: url.searchParams.get("message") || "",
-      };
-    } catch {
-      return { resource: "Post", id: "", message: "" };
-    }
-  } catch (error) {
-    logger.error("Error getting error params:", error);
-    return { resource: "Post", id: "", message: "" };
-  }
-}
+//     try {
+//       const url = new URL(referer);
+//       return {
+//         resource: url.searchParams.get("resource") || "Post",
+//         id: url.searchParams.get("id") || "",
+//         message: url.searchParams.get("message") || "",
+//       };
+//     } catch {
+//       return { resource: "Post", id: "", message: "" };
+//     }
+//   } catch (error) {
+//     logger.error("Error getting error params:", error);
+//     return { resource: "Post", id: "", message: "" };
+//   }
+// }
 
 export default async function NotFound() {
-  const { resource, id, message } = await getErrorParams();
+  // const { resource, id, message } = await getErrorParams();
+  const resource = "Post";
+  const id = "";
+  const message = "The post could not be found.";
   const displayMessage =
     message ||
     `The ${resource.toLowerCase()}${id ? ` with ID "${id}"` : ""} could not be found.`;
