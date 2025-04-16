@@ -66,15 +66,17 @@ export function normalizeAppError(error: unknown): Error {
 export function serializeSystemError(error: SystemErrorData) {
   if (!error || !isSystemError(error)) return {};
 
+  const original = error.originalError;
+  const context = error.context;
+
   return {
-    originalError: {
-      name: error.originalError?.name || "",
-      message: error.originalError?.message || "",
-      stack: error.originalError?.stack || "",
-      ...(error.context && {
-        ...error.context,
-        metadata: error.context.metadata || {},
-      }),
-    },
+    original_error_name: original?.name || "",
+    original_error_message: original?.message || "",
+    original_error_stack: original?.stack || "",
+    ...(context?.userId && { context_user_id: context.userId }),
+    ...(context?.action && { context_action: context.action }),
+    ...(context?.metadata && {
+      context_metadata: JSON.stringify(context.metadata),
+    }),
   };
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { isSystemError } from "@/utils/errors";
+import { isSystemError, normalizeAppError } from "@/utils/errors";
 import { logClientError } from "@/lib/telemetry/posthog";
 import { Button } from "@/components/ui/button";
 import { SystemError } from "@/utils/errors";
@@ -13,13 +13,17 @@ interface ErrorBoundaryProps {
 
 export default function ErrorBoundary({ error, reset }: ErrorBoundaryProps) {
   useEffect(() => {
-    logClientError(
-      new SystemError("Error in ErrorBoundary", {
-        data: {
-          originalError: error,
-        },
-      })
-    );
+    if (isSystemError(error)) {
+      logClientError(error);
+    } else {
+      logClientError(
+        new SystemError("Error in ErrorBoundary", {
+          data: {
+            originalError: normalizeAppError(error),
+          },
+        })
+      );
+    }
   }, [error]);
 
   const errorMessage = isSystemError(error)
