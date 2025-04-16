@@ -63,11 +63,11 @@ export function normalizeAppError(error: unknown): Error {
   return new Error(String(error));
 }
 
-export function serializeSystemError(error: SystemErrorData) {
+export function serializeSystemError(error: SystemErrorType) {
   if (!error || !isSystemError(error)) return {};
 
-  const original = error.originalError;
-  const context = error.context;
+  const original = error.data.originalError;
+  const context = error.data.context;
 
   return {
     original_error_name: original?.name || "",

@@ -32,7 +32,7 @@ export function logServerError(
         error_name: error.name,
         error_message: error.message,
         error_stack: error.stack,
-        ...(error.data && serializeSystemError(error.data)),
+        ...(error.data && serializeSystemError(error)),
         timestamp: new Date().toISOString(),
         environment: process.env.NODE_ENV,
       },
