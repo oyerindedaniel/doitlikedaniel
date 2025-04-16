@@ -42,29 +42,21 @@ export function TSCodeBlock({
     let isMounted = true;
 
     async function formatCode() {
-      try {
-        let codeToFormat = typeof children === "string" ? children.trim() : "";
+      let codeToFormat = typeof children === "string" ? children.trim() : "";
 
-        // Handle potential escape sequences in MDX (like \_)
-        codeToFormat = codeToFormat.replace(/\\([_])/g, "$1");
+      // Handle potential escape sequences in MDX (like \_)
+      codeToFormat = codeToFormat.replace(/\\([_])/g, "$1");
 
-        const formatted = await formatTsCode(codeToFormat);
+      const formattedCode = await formatTsCode(codeToFormat);
 
-        if (isMounted) {
-          if (codeToFormat !== formatted) {
-            console.debug(`Code was reformatted for ${filename}`, {
-              id: blockId,
-              formatted: true,
-            });
-          }
-          setCode(formatted);
+      if (isMounted) {
+        if (codeToFormat !== formattedCode) {
+          console.debug(`Code was reformatted for ${filename}`, {
+            id: blockId,
+            formatted: true,
+          });
         }
-      } catch (error) {
-        logger.error("Error formatting code:", error);
-
-        if (isMounted) {
-          setCode(typeof children === "string" ? children.trim() : "");
-        }
+        setCode(formattedCode);
       }
     }
 

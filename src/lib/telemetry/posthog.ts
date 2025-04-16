@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { isProduction } from "@/config/app";
@@ -5,6 +6,7 @@ import logger from "@/utils/logger";
 import posthog from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
 import { createErrorPayload } from "@/utils/error-utils";
+import { normalizeAppError, SystemError } from "@/utils/errors";
 
 type PageViewContext = {
   $current_url: string;
@@ -45,7 +47,7 @@ export function capturePageView(url: string, context?: PageViewContext) {
 /**
  * Log a client error event to PostHog
  */
-export function logClientError(error: Error) {
+export function logClientError(error: Error, options?: { internal?: boolean }) {
   if (!isProduction || !posthog) return;
 
   // TODO: consider adding a group
@@ -54,6 +56,17 @@ export function logClientError(error: Error) {
   } catch (posthogError) {
     logger.error("Failed to log client error to PostHog:", posthogError);
     logger.error("Original error:", error);
+
+    // if (!options?.internal) {
+    //   logClientError(
+    //     new SystemError("PostHog capture failed", {
+    //       data: {
+    //         originalError: normalizeAppError(posthogError),
+    //       },
+    //     }),
+    //     { internal: true }
+    //   );
+    // }
   }
 }
 
