@@ -29,12 +29,10 @@ export function logServerError(
       distinctId,
       event: "server_error",
       properties: {
-        error: {
-          name: error.name,
-          message: error.message,
-          stack: error.stack,
-          ...serializeSystemError(error.data),
-        },
+        error_name: error.name,
+        error_message: error.message,
+        error_stack: error.stack,
+        ...(error.data && serializeSystemError(error.data)),
         timestamp: new Date().toISOString(),
         environment: process.env.NODE_ENV,
       },
