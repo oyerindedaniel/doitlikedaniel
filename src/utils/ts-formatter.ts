@@ -1,8 +1,8 @@
 /**
  * TypeScript code formatter using Prettier
  */
-import prettier from "prettier/standalone";
-import typescriptParser from "prettier/parser-typescript";
+import * as prettier from "prettier/standalone";
+import * as typescriptParser from "prettier/parser-typescript";
 import estreePlugin from "prettier/plugins/estree";
 import logger from "./logger";
 import { normalizeAppError } from "./errors";
