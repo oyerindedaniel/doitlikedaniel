@@ -13,6 +13,10 @@ import { SystemError } from "./errors";
  * Format TypeScript code using Prettier async API
  */
 export async function formatTsCode(code: string): Promise<string> {
+  if (typeof window === "undefined" || typeof navigator === "undefined") {
+    return code;
+  }
+
   code = code.replace(/\\([_])/g, "$1");
 
   if (!code || code.trim() === "") return code;
