@@ -3,8 +3,7 @@
 import { PostHog } from "posthog-node";
 import { isProduction } from "@/config/app";
 import logger from "@/utils/logger";
-import { SystemErrorType } from "@/utils/errors";
-import { serializeSystemError } from "@/utils/errors";
+import { createErrorPayload } from "@/utils/error-utils";
 
 const serverPosthog = isProduction
   ? new PostHog(process.env.NEXT_PUBLIC_POSTHOG_KEY || "", {
@@ -15,7 +14,7 @@ const serverPosthog = isProduction
   : null;
 
 export function logServerError(
-  error: SystemErrorType,
+  error: Error,
   distinctId: string = "server"
 ): void {
   if (!isProduction || !serverPosthog) {
@@ -28,14 +27,7 @@ export function logServerError(
     serverPosthog.capture({
       distinctId,
       event: "server_error",
-      properties: {
-        error_name: error.name,
-        error_message: error.message,
-        error_stack: error.stack,
-        ...(error.data && serializeSystemError(error)),
-        timestamp: new Date().toISOString(),
-        environment: process.env.NODE_ENV,
-      },
+      properties: createErrorPayload(error),
     });
   } catch (posthogError) {
     logger.error("PostHog capture failed:", posthogError);
