@@ -49,15 +49,13 @@ export function capturePageView(url: string, context?: PageViewContext) {
 export function logClientError(error: SystemErrorType) {
   if (!isProduction || !posthog) return;
 
-  console.log("logClientError", serializeSystemError(error.data));
-
   // TODO: consider adding a group
   try {
     posthog.capture("client_error", {
       error_name: error.name,
       error_message: error.message,
       error_stack: error.stack,
-      ...(error.data && serializeSystemError(error.data)),
+      ...(error.data && serializeSystemError(error)),
       timestamp: new Date().toISOString(),
       environment: process.env.NODE_ENV,
     });
