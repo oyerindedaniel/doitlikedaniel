@@ -29,10 +29,7 @@ export function CopyCodeButton({
     <Button
       variant="gradient"
       size="sm"
-      className={cn(
-        "text-xs rounded px-3! py-1! w-fit h-fit opacity-0 group-hover:opacity-100 transition-opacity",
-        className
-      )}
+      className={cn("text-xs rounded px-3! py-1! w-fit h-fit", className)}
       onClick={handleCopy}
       {...props}
     >

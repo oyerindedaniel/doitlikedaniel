@@ -24,8 +24,7 @@ pre.shiki {
   background-color: #f8fafc !important;
 }
 
-pre.shiki:focus-visible,
-pre.shiki:hover {
+pre.shiki:focus-visible {
   box-shadow:
     0 0 0 2px var(--background),
     0 0 0 4px rgba(59, 130, 246, 0.2);
@@ -37,8 +36,7 @@ pre.shiki:hover {
   background-color: #121212 !important;
 }
 
-[data-theme="dark"] pre.shiki:focus-visible,
-[data-theme="dark"] pre.shiki:hover {
+[data-theme="dark"] pre.shiki:focus-visible {
   box-shadow:
     0 0 0 2px var(--background),
     0 0 0 4px rgba(59, 130, 246, 0.2);

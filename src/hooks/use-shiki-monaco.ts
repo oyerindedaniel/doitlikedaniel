@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { createHighlighter } from "shiki";
 import { shikiToMonaco } from "@shikijs/monaco";
 import type * as Monaco from "monaco-editor";
@@ -8,6 +8,7 @@ import { shikiConfig } from "@/config/shiki";
 
 export function useShikiMonaco() {
   const highlighterRef = useRef<Highlighter | null>(null);
+  const monacoRef = useRef<typeof Monaco | null>(null);
   const { resolvedTheme } = useTheme();
 
   async function initializeHighlighter() {
@@ -22,6 +23,12 @@ export function useShikiMonaco() {
   useEffect(() => {
     initializeHighlighter();
   }, []);
+
+  const getShikiTheme = useCallback(() => {
+    return resolvedTheme === "dark"
+      ? shikiConfig.themes.dark
+      : shikiConfig.themes.light;
+  }, [resolvedTheme]);
 
   // This helps Monaco editor properly initialize TypeScript definitions
   useEffect(() => {
@@ -40,19 +47,19 @@ export function useShikiMonaco() {
     }
 
     if (highlighterRef.current) {
+      monacoRef.current = monaco;
+
       for (const lang of shikiConfig.langs) {
         monaco.languages.register({ id: lang });
       }
 
       shikiToMonaco(highlighterRef.current, monaco);
+      monaco.editor.setTheme(getShikiTheme());
     }
   };
 
   return {
     setupMonaco,
-    theme:
-      resolvedTheme === "dark"
-        ? shikiConfig.themes.dark
-        : shikiConfig.themes.light,
+    theme: getShikiTheme(),
   };
 }

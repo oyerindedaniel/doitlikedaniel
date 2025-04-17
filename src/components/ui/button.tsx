@@ -6,7 +6,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap cursor-pointer rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 relative",
+  "inline-flex items-center justify-center whitespace-nowrap cursor-pointer rounded-3xl text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 relative",
   {
     variants: {
       variant: {
@@ -22,7 +22,7 @@ const buttonVariants = cva(
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-slate-800 dark:hover:text-slate-200",
         link: "text-primary underline-offset-4 hover:underline dark:text-blue-400 dark:hover:text-blue-300",
         gradient:
-          "text-white overflow-hidden before:absolute before:inset-0 before:z-[-1] before:bg-gradient-to-r before:from-blue-500 before:to-purple-600 before:opacity-90 hover:before:opacity-100 transition-all duration-300 dark:before:from-blue-600 dark:before:to-purple-700",
+          "text-white bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-all duration-300 dark:from-blue-600 dark:to-purple-700 dark:hover:from-blue-700 dark:hover:to-purple-800",
         animated:
           "text-slate-900 dark:text-white relative overflow-hidden before:absolute before:left-0 before:bottom-0 before:h-[2px] before:w-0 before:bg-blue-500 before:transition-all before:duration-300 hover:before:w-full focus:before:w-full dark:before:bg-blue-400",
         ripple:
@@ -30,8 +30,8 @@ const buttonVariants = cva(
       },
       size: {
         default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
+        sm: "h-9 px-3",
+        lg: "h-11 px-8",
         icon: "h-10 w-10",
       },
       fullWidth: {

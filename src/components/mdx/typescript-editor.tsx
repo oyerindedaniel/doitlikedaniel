@@ -13,7 +13,7 @@ import { useShikiMonaco } from "@/hooks/use-shiki-monaco";
 const Editor = dynamic(
   () => import("@monaco-editor/react").then((mod) => mod.Editor),
   {
-    // loading: () => <MonacoLoader height="300px" />,
+    loading: () => <MonacoLoader height="300px" />,
     ssr: false,
   }
 );
