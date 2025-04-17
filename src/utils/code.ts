@@ -42,15 +42,9 @@ function extractRawCode(children: ReactNode): string {
 
 // Helper function to extract language from className
 function extractLanguage(className?: string): string {
-  if (!className) return "code";
+  if (!className) return "ts";
 
-  const hljsMatch = className.match(/hljs\s+language-([a-zA-Z0-9_-]+)/);
-  if (hljsMatch) return hljsMatch[1];
-
-  const standardMatch = className.match(/language-([a-zA-Z0-9_-]+)/);
-  if (standardMatch) return standardMatch[1];
-
-  return "code";
+  return "ts";
 }
 
 // Check if this is a code block with a child <code> element

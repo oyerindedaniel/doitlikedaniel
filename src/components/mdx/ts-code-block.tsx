@@ -42,10 +42,7 @@ export function TSCodeBlock({
     let isMounted = true;
 
     async function formatCode() {
-      let codeToFormat = typeof children === "string" ? children.trim() : "";
-
-      // Handle potential escape sequences in MDX (like \_)
-      codeToFormat = codeToFormat.replace(/\\([_])/g, "$1");
+      const codeToFormat = typeof children === "string" ? children.trim() : "";
 
       const formattedCode = await formatTsCode(codeToFormat);
 

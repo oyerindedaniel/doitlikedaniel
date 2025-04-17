@@ -83,9 +83,9 @@ export default async function BlogPostPage({
     const { content: mdxContent } = await processMdx(content);
 
     return (
-      <div className="mx-auto px-4 py-10">
+      <div className="mx-auto px-1 md:px-3 py-10">
         {/* Back link */}
-        <div className="mx-auto max-w-5xl px-4 mb-8">
+        <div className="mx-auto max-w-5xl mb-8 sticky top-0 md:top-12 backdrop-blur-sm md:backdrop-blur-none bg-background/80 md:bg-transparent z-10">
           <Button variant="link" size="sm" asChild>
             <Link
               href="/blog"
@@ -200,7 +200,7 @@ export default async function BlogPostPage({
               </div>
 
               {/* Title */}
-              <h1 className="mb-2 text-3xl font-normal leading-snug text-slate-900 dark:text-white sm:text-3xl">
+              <h1 className="mb-2 text-3xl font-normal leading-tight text-slate-900 dark:text-white sm:text-3xl">
                 {meta.title}
               </h1>
 
@@ -235,6 +235,8 @@ export default async function BlogPostPage({
                 </div>
               )}
             </header>
+
+            <div className="bg-gray-100 dark:bg-gray-800 h-px w-full my-6" />
 
             {/* Article content */}
             <article className="prose prose-sm max-w-none text-slate-700 dark:prose-invert prose-headings:font-bold prose-headings:text-slate-900 prose-p:leading-relaxed prose-p:text-slate-700 prose-a:text-blue-600 prose-a:underline prose-a:underline-offset-2 hover:prose-a:text-blue-800 dark:prose-headings:text-slate-50 dark:prose-p:text-slate-300 dark:prose-a:text-blue-400 dark:hover:prose-a:text-blue-300">

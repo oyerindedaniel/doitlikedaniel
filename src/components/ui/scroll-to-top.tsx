@@ -5,7 +5,6 @@ import { cn } from "@/lib/utils";
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
@@ -52,34 +51,32 @@ export function ScrollToTop({
   };
 
   return (
-    <TooltipProvider>
-      <Tooltip>
-        <div
-          className={cn(
-            "fixed bottom-6 right-6 z-50 scale-100 hover:scale-105 transition-all duration-300 ease-in-out",
-            show
-              ? "translate-y-0 opacity-100"
-              : "translate-y-10 opacity-0 pointer-events-none",
-            className
-          )}
-        >
-          <TooltipTrigger asChild>
-            <Button
-              onClick={scrollToTop}
-              size="icon"
-              variant="gradient"
-              className="h-12 w-12 rounded-full shadow-lg"
-              aria-label={tooltipText}
-            >
-              <ArrowUpIcon className="h-5 w-5 animate-pulse-subtle" />
-            </Button>
-          </TooltipTrigger>
-        </div>
-        <TooltipContent className="text-xs" variant="gradient" side="left">
-          {tooltipText}
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <Tooltip>
+      <div
+        className={cn(
+          "fixed bottom-6 right-6 z-50 scale-100 hover:scale-105 transition-all duration-300 ease-in-out",
+          show
+            ? "translate-y-0 opacity-100"
+            : "translate-y-10 opacity-0 pointer-events-none",
+          className
+        )}
+      >
+        <TooltipTrigger asChild>
+          <Button
+            onClick={scrollToTop}
+            size="icon"
+            variant="gradient"
+            className="h-12 w-12 rounded-full shadow-lg"
+            aria-label={tooltipText}
+          >
+            <ArrowUpIcon className="h-5 w-5 animate-pulse-subtle" />
+          </Button>
+        </TooltipTrigger>
+      </div>
+      <TooltipContent className="text-xs" variant="gradient" side="left">
+        {tooltipText}
+      </TooltipContent>
+    </Tooltip>
   );
 }
 
