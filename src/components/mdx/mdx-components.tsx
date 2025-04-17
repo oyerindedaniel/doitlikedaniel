@@ -11,6 +11,7 @@ import { SmartPre } from "./smart-code-block";
 import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
 import rehypeShiki from "@shikijs/rehype";
+import { shikiConfig } from "@/config/shiki";
 import {
   transformerNotationDiff,
   transformerNotationHighlight,
@@ -32,7 +33,6 @@ export const mdxComponents = {
   a: CustomLink,
   img: CustomImage,
   pre: CodeBlock,
-  code: (props: ComponentProps) => <code {...props} />,
 
   // Custom components
   Alert,
@@ -187,12 +187,16 @@ export const mdxOptions: MDXRemoteProps["options"] = {
         rehypeShiki,
         {
           themes: {
-            light: "github-light",
-            dark: "dracula",
+            light: shikiConfig.themes.light,
+            dark: shikiConfig.themes.dark,
           },
           inline: "tailing-curly-colon",
           highlightClassName: "highlighted-line",
-          // languageTextMap: (lang: string) => lang,
+          langs: shikiConfig.langs,
+          langAlias: {
+            js: "javascript",
+            ts: "typescript",
+          },
           transformers: [
             transformerNotationDiff(),
             transformerNotationHighlight(),
