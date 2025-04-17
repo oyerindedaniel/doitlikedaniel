@@ -65,10 +65,12 @@ export default async function NotFound() {
           </p>
         )}
 
-        <Button variant="gradient" asChild>
-          <Link href="/blog" className="inline-flex items-center">
+        <Button
+          variant="gradient"
+          asChild
+          leftElement={
             <svg
-              className="mr-2 h-4 w-4"
+              className="h-4 w-4"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -80,8 +82,9 @@ export default async function NotFound() {
                 d="M15 19l-7-7 7-7"
               />
             </svg>
-            Back to Blog
-          </Link>
+          }
+        >
+          <Link href="/blog">Back to Blog</Link>
         </Button>
       </div>
     </div>
