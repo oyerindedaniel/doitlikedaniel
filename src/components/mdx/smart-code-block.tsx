@@ -2,7 +2,7 @@
 
 import { ReactNode, ReactElement } from "react";
 import CodeBlock from "./code-block";
-import { TSCodeBlock } from "./ts-code-block";
+import { TSCodeBlock } from "./monaco-code-block";
 import { extractLanguage, extractRawCode, isCodeBlock } from "@/utils/code";
 
 interface SmartCodeBlockProps {

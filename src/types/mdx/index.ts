@@ -13,6 +13,8 @@ export interface PostMeta {
   readingTime?: string;
 }
 
+export type SupportedLanguage = "typescript" | "python";
+
 export type CustomImageProps = Omit<
   ImgHTMLAttributes<HTMLImageElement>,
   "width" | "height" | "loading" | "sizes"

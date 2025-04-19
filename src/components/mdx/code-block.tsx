@@ -10,14 +10,8 @@ export default function CodeBlock({
   style,
   ...props
 }: CodeBlockProps) {
+  // TODO: dynamically add language to the code block (cant seem to get it to work)
   const language = extractLanguage(className);
-
-  console.log({
-    children,
-    className,
-    style,
-    ...props,
-  });
 
   return (
     <div className="group relative rounded-md my-3">

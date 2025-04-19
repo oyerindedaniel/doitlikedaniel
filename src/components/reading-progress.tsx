@@ -12,34 +12,28 @@ export function ReadingProgress({ className }: ReadingProgressProps) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Show the progress bar after a slight delay for a nice entrance
     const timer = setTimeout(() => {
       setIsVisible(true);
     }, 300);
 
     const updateProgress = () => {
-      // Calculate how far the user has scrolled through the entire page
       const windowHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight;
       const scrollTop = window.scrollY;
 
-      // Total scrollable distance
       const scrollableHeight = documentHeight - windowHeight;
 
       if (scrollableHeight <= 0) {
-        // Page is shorter than viewport
         setProgress(100);
         return;
       }
 
-      // Calculate percentage scrolled (capped at 100%)
       const scrollPercentage = Math.min(
         100,
         (scrollTop / scrollableHeight) * 100
       );
       setProgress(scrollPercentage);
 
-      // Show/hide progress bar based on scroll position
       if (scrollTop > 100) {
         setIsVisible(true);
       } else if (scrollTop < 50) {
@@ -47,11 +41,9 @@ export function ReadingProgress({ className }: ReadingProgressProps) {
       }
     };
 
-    // Update on scroll and resize
     window.addEventListener("scroll", updateProgress, { passive: true });
     window.addEventListener("resize", updateProgress, { passive: true });
 
-    // Initial calculation
     updateProgress();
 
     return () => {

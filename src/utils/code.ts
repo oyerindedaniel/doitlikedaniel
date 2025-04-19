@@ -1,5 +1,5 @@
 import { ReactElement, ReactNode } from "react";
-import { formatTsCode } from "./ts-formatter";
+import { formatCode } from "./code-formatter";
 
 interface ReactElementWithProps {
   props: {
@@ -58,4 +58,4 @@ function isCodeBlock(children: ReactNode): boolean {
   );
 }
 
-export { extractRawCode, extractLanguage, formatTsCode, isCodeBlock };
+export { extractRawCode, extractLanguage, formatCode, isCodeBlock };
