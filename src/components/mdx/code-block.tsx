@@ -12,13 +12,6 @@ export default function CodeBlock({
 }: CodeBlockProps) {
   const language = extractLanguage(className);
 
-  console.log({
-    children,
-    className,
-    style,
-    ...props,
-  });
-
   return (
     <div className="group relative rounded-md my-3">
       {/* Language badge */}

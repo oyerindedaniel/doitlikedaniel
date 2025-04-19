@@ -6,7 +6,11 @@ import CodeBlock from "./code-block";
 import { Alert } from "./alert";
 import { CalloutBox } from "./callout-box";
 import { YoutubeEmbed } from "./youtube-embed";
-import { TSCodeBlock } from "./ts-code-block";
+import {
+  MonacoCodeBlock,
+  TSCodeBlock,
+  PythonCodeBlock,
+} from "./monaco-code-block";
 import { SmartPre } from "./smart-code-block";
 import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
@@ -38,7 +42,9 @@ export const mdxComponents = {
   Alert,
   CalloutBox,
   YouTube: YoutubeEmbed,
+  MonacoCodeBlock,
   TSCodeBlock,
+  PythonCodeBlock,
   // SmartPre,
 
   // Image,
@@ -52,7 +58,7 @@ export const mdxComponents = {
   ),
   h2: ({ children, ...props }: ComponentProps) => (
     <h2
-      className="mt-4 mb-1.5 text-xl font-normal leading-tight  text-slate-800 dark:text-slate-100"
+      className="mt-6 mb-1.5 text-xl font-normal leading-tight  text-slate-800 dark:text-slate-100"
       {...props}
     >
       {children}
@@ -60,7 +66,7 @@ export const mdxComponents = {
   ),
   h3: ({ children, ...props }: ComponentProps) => (
     <h3
-      className="mt-4 mb-1.5 text-lg font-normal leading-snug  text-slate-800 dark:text-slate-100"
+      className="mt-6 mb-1.5 text-lg font-normal leading-snug  text-slate-800 dark:text-slate-100"
       {...props}
     >
       {children}
@@ -68,7 +74,7 @@ export const mdxComponents = {
   ),
   h4: ({ children, ...props }: ComponentProps) => (
     <h4
-      className="mt-4 mb-1.5 text-md font-normal leading-snug text-slate-800 dark:text-slate-200"
+      className="mt-6 mb-1.5 text-md font-normal leading-snug text-slate-800 dark:text-slate-200"
       {...props}
     >
       {children}
@@ -216,6 +222,8 @@ export {
   Alert,
   CalloutBox,
   YoutubeEmbed,
+  MonacoCodeBlock,
   TSCodeBlock,
+  PythonCodeBlock,
   SmartPre,
 };

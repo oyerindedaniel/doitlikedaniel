@@ -5,7 +5,11 @@ import { ReactNode } from "react";
 import { Alert } from "./alert";
 import { CalloutBox } from "./callout-box";
 import { YoutubeEmbed } from "./youtube-embed";
-import { TSCodeBlock } from "./ts-code-block";
+import {
+  MonacoCodeBlock,
+  TSCodeBlock,
+  PythonCodeBlock,
+} from "./monaco-code-block";
 import { SmartCodeBlock, SmartPre } from "./smart-code-block";
 
 /**

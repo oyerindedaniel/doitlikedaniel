@@ -1,14 +1,17 @@
 /**
  * Logger utility that only logs in development mode
  */
+
+const isDev = process.env.NODE_ENV !== "production";
+
 const logger = {
   log: (...args: unknown[]) => {
-    if (process.env.NODE_ENV !== "production") {
+    if (isDev) {
       console.log(...args);
     }
   },
   warn: (...args: unknown[]) => {
-    if (process.env.NODE_ENV !== "production") {
+    if (isDev) {
       console.warn(...args);
     }
   },
@@ -16,7 +19,7 @@ const logger = {
     console.error(...args);
   },
   debug: (message: string, data?: unknown) => {
-    if (process.env.NODE_ENV !== "production") {
+    if (isDev) {
       console.log(
         `%c[DEBUG] ${message}`,
         "background: #222; color: #bada55",
@@ -25,7 +28,7 @@ const logger = {
     }
   },
   format: (message: string, data?: unknown) => {
-    if (process.env.NODE_ENV !== "production") {
+    if (isDev) {
       console.log(
         `%c[FORMAT] ${message}`,
         "background: #553399; color: #ffffff",
