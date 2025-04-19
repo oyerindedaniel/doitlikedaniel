@@ -7,7 +7,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { TableOfContents } from "@/components/mdx/table-of-contents";
 import { Button } from "@/components/ui/button";
-import { ReadingProgress } from "@/components/mdx/reading-progress";
+import { ReadingProgress } from "@/components/reading-progress";
 import { MetaItem } from "@/components/ui/meta-item";
 import {
   isNotFoundError,
@@ -85,7 +85,7 @@ export default async function BlogPostPage({
     return (
       <div className="mx-auto px-1 md:px-3 py-10">
         {/* Back link */}
-        <div className="mx-auto max-w-5xl mb-8 sticky top-0 md:top-12 backdrop-blur-sm md:backdrop-blur-none bg-background/80 md:bg-transparent z-10">
+        <div className="mx-auto max-w-5xl mb-8 sticky top-4 lg:top-0 md:top-12 backdrop-blur-sm md:backdrop-blur-none bg-background/80 md:bg-transparent z-10">
           <Button variant="link" size="sm" asChild>
             <Link
               href="/blog"
@@ -119,7 +119,7 @@ export default async function BlogPostPage({
             {/* Post header */}
             <header className="mb-6">
               {/* Meta information */}
-              <div className="mb-2 flex flex-wrap items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
+              <div className="mb-4 flex flex-wrap items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
                 {/* Date with icon */}
                 <MetaItem
                   icon={
