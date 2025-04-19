@@ -85,7 +85,7 @@ export default async function BlogPostPage({
     return (
       <div className="mx-auto px-1 md:px-3 py-10">
         {/* Back link */}
-        <div className="mx-auto max-w-5xl mb-8 sticky top-4 lg:top-0 md:top-12 backdrop-blur-sm md:backdrop-blur-none bg-background/80 md:bg-transparent z-10">
+        <div className="mx-auto max-w-5xl mb-8 sticky top-0 lg:top-0 md:top-12 backdrop-blur-sm md:backdrop-blur-none bg-background/80 md:bg-transparent z-10">
           <Button variant="link" size="sm" asChild>
             <Link
               href="/blog"
