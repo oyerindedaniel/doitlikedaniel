@@ -6,6 +6,7 @@ import { getPlaiceholder } from "plaiceholder";
 import logger from "@/utils/logger";
 import { isRemoteImage, normalizeImagePath } from "./image-utils";
 import { IS_PRODUCTION } from "@/config/app";
+import { removeExtension } from "./image-utils";
 
 export const IMAGES_DIR = path.join(process.cwd(), "public/images");
 export const PLACEHOLDER_DIR = path.join(process.cwd(), "public/placeholders");
@@ -37,7 +38,7 @@ export function getPlaceholderPath(src: string): string {
     throw new Error(`Placeholder not found for image: ${src}`);
   }
 
-  return `/placeholders/${relativePath}`;
+  return `/placeholders/${removeExtension(relativePath)}.txt`;
 }
 
 export async function generatePlaceholder(imagePath: string): Promise<string> {
@@ -93,7 +94,7 @@ export async function savePlaceholder(
     throw new Error(`Cannot save placeholder for remote image: ${imagePath}`);
   }
 
-  const relativePath = normalizeImagePath(imagePath);
+  const relativePath = `${removeExtension(normalizeImagePath(imagePath))}.txt`;
 
   const placeholderPath = path.join(PLACEHOLDER_DIR, relativePath);
 

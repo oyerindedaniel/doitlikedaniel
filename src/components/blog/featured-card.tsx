@@ -24,6 +24,7 @@ export function FeaturedCard({ post }: FeaturedPostProps) {
         <div className="relative aspect-[4/3] w-full overflow-hidden rounded-sm bg-gray-50 md:aspect-auto md:h-full dark:bg-gray-900">
           {post.coverImage ? (
             <EnhancedImage
+              skipPlaceholder={false}
               src={post.coverImage}
               alt={post.title}
               fill

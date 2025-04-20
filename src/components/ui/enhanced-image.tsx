@@ -27,10 +27,11 @@ export function EnhancedImage({
 
   const showLoading = !skipPlaceholder;
 
-  const blurDataURL = useMemo(() => {
+  const placeholderPath = useMemo(() => {
     if (skipPlaceholder || isRemoteImage(src)) return undefined;
 
     try {
+      console.log("getPlaceholderPath", getPlaceholderPath(src));
       return getPlaceholderPath(src);
     } catch (err) {
       logger.warn(`Error getting placeholder for ${src}:`, err);
@@ -49,7 +50,7 @@ export function EnhancedImage({
 
   return (
     <>
-      {showLoading && !blurDataURL && (
+      {showLoading && !placeholderPath && (
         <div className="absolute inset-0 bg-gray-200 dark:bg-gray-800 animate-shimmer rounded-md" />
       )}
       <Image
@@ -58,8 +59,8 @@ export function EnhancedImage({
         width={Number(width) || undefined}
         height={Number(height) || undefined}
         className={cn("", className)}
-        placeholder={blurDataURL ? "blur" : "empty"}
-        blurDataURL={blurDataURL}
+        placeholder={placeholderPath ? "blur" : "empty"}
+        blurDataURL={placeholderPath}
         onError={handleError}
         {...props}
       />

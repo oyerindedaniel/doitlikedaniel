@@ -4,6 +4,10 @@ export function isRemoteImage(src: string): boolean {
   return src.startsWith("http") || src.startsWith("data:");
 }
 
+export function removeExtension(src: string): string {
+  return src.split(".")[0];
+}
+
 /**
  * Normalize a path by replacing backslashes with forward slashes
  * @param path - The path to normalize
@@ -47,5 +51,5 @@ export function getPlaceholderPath(src: string): string {
   const cleanSrc = src.split("?")[0];
   const relativePath = normalizeImagePath(cleanSrc);
 
-  return `/placeholders/${relativePath}`;
+  return `/placeholders/${removeExtension(relativePath)}.txt`;
 }
