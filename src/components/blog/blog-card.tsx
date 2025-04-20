@@ -86,7 +86,7 @@ export default function BlogPost({ post }: BlogPostProps) {
           </div>
 
           {/* Title */}
-          <h2 className="mb-2 text-lg font-medium tracking-tight text-gray-900 dark:text-white">
+          <h2 className="mb-2 text-xl font-medium tracking-tight text-gray-900 dark:text-white">
             <Link
               href={`/blog/${post.slug}`}
               className="after:absolute after:inset-0 hover:text-blue-500 dark:hover:text-blue-400"
@@ -96,7 +96,7 @@ export default function BlogPost({ post }: BlogPostProps) {
           </h2>
 
           {/* Excerpt */}
-          <p className="mb-3 text-sm leading-relaxed line-clamp-3 text-gray-600 dark:text-gray-400">
+          <p className="mb-2 text-sm leading-relaxed line-clamp-3 text-gray-600 dark:text-gray-400">
             {post.excerpt}
           </p>
 

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 import Header from "@/components/header";
@@ -9,15 +9,49 @@ import { PHProvider } from "@/app/ph-provider";
 import SuspendedPostHogPageView from "@/app/ph-page-view";
 import { isProduction } from "@/config/app";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
-  title: "Daniel's Personal Site",
-  description: "Personal website and blog by Daniel",
-  metadataBase: new URL(
-    process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
-  ),
+  title: siteConfig.title,
+  description: siteConfig.description,
+  metadataBase: new URL(siteConfig.url),
+  keywords: siteConfig.keywords,
+  authors: [
+    {
+      name: siteConfig.author.name,
+      url: siteConfig.url,
+    },
+  ],
+  creator: siteConfig.author.name,
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: siteConfig.url,
+    title: siteConfig.title.default,
+    description: siteConfig.description,
+    siteName: siteConfig.name,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.title.default,
+    description: siteConfig.description,
+    creator: siteConfig.author.twitter,
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    {
+      media: "(prefers-color-scheme: light)",
+      color: siteConfig.themeColor.light,
+    },
+    {
+      media: "(prefers-color-scheme: dark)",
+      color: siteConfig.themeColor.dark,
+    },
+  ],
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
