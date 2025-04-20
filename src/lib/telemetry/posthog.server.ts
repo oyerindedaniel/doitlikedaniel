@@ -2,12 +2,12 @@
 "server-only";
 
 import { PostHog } from "posthog-node";
-import { isProduction } from "@/config/app";
+import { IS_PRODUCTION } from "@/config/app";
 import logger from "@/utils/logger";
 import { createErrorPayload } from "@/utils/error-utils";
 import { normalizeAppError, SystemError } from "@/utils/errors";
 
-const serverPosthog = isProduction
+const serverPosthog = IS_PRODUCTION
   ? new PostHog(process.env.NEXT_PUBLIC_POSTHOG_KEY || "", {
       host: process.env.NEXT_PUBLIC_POSTHOG_HOST || "https://eu.i.posthog.com",
       flushAt: 1,
@@ -20,7 +20,7 @@ export function logServerError(
   distinctId: string = "server",
   options?: { internal?: boolean }
 ): void {
-  if (!isProduction || !serverPosthog) {
+  if (!IS_PRODUCTION || !serverPosthog) {
     logger.error("Error:", error);
 
     return;

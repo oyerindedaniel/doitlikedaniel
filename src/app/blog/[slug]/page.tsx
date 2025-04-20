@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
-import Image from "next/image";
 import { getPostBySlug, getAllPosts } from "@/lib/mdx/mdx-utils";
 import { processMdx } from "@/lib/mdx/mdx-server";
 import Link from "next/link";
@@ -16,6 +15,7 @@ import {
   SystemError,
 } from "@/utils/errors";
 import { logServerError } from "@/lib/telemetry/posthog.server";
+import { EnhancedImage } from "@/components/ui/enhanced-image";
 
 export async function generateMetadata({
   params,
@@ -223,7 +223,7 @@ export default async function BlogPostPage({
               {/* Cover image */}
               {meta.coverImage && (
                 <div className="relative mb-4 aspect-[3/2] rounded-sm overflow-hidden">
-                  <Image
+                  <EnhancedImage
                     src={meta.coverImage}
                     alt={meta.title}
                     fill

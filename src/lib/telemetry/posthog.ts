@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { isProduction } from "@/config/app";
+import { IS_PRODUCTION } from "@/config/app";
 import logger from "@/utils/logger";
 import posthog from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
@@ -32,7 +32,7 @@ export function initPostHogClient(): void {
  * Log a page view event to PostHog
  */
 export function capturePageView(url: string, context?: PageViewContext) {
-  if (!isProduction || !posthog) return;
+  if (!IS_PRODUCTION || !posthog) return;
 
   try {
     posthog.capture("$pageview", {
@@ -48,7 +48,7 @@ export function capturePageView(url: string, context?: PageViewContext) {
  * Log a client error event to PostHog
  */
 export function logClientError(error: Error, options?: { internal?: boolean }) {
-  if (!isProduction || !posthog) return;
+  if (!IS_PRODUCTION || !posthog) return;
 
   // TODO: consider adding a group
   try {

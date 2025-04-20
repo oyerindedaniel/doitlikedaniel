@@ -7,7 +7,7 @@ import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import { fontVariables } from "@/assets/fonts";
 import { PHProvider } from "@/app/ph-provider";
 import SuspendedPostHogPageView from "@/app/ph-page-view";
-import { isProduction } from "@/config/app";
+import { IS_PRODUCTION } from "@/config/app";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { siteConfig } from "@/config/site";
 
@@ -62,7 +62,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {!isProduction && (
+        {!IS_PRODUCTION && (
           <script
             src="https://unpkg.com/react-scan/dist/auto.global.js"
             async

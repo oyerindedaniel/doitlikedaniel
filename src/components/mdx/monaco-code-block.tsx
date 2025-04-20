@@ -37,7 +37,7 @@ export interface MonacoCodeBlockProps
     | "language"
   > {
   children: string;
-  id?: string;
+  id?: CodeEditorProps["instanceId"];
 }
 
 export const MonacoCodeBlock = memo(function MonacoCodeBlock({
