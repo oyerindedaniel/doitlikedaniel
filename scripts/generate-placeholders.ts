@@ -11,6 +11,7 @@ import {
   joinGlobPath,
   normalizeImagePath,
   normalizePath,
+  removeExtension,
 } from "../src/lib/image-utils";
 import { IS_PRODUCTION, ENFORCE_PLACEHOLDERS } from "@/config/app";
 
@@ -50,7 +51,10 @@ async function generatePlaceholders() {
         normalizedPath,
       });
 
-      const placeholderPath = path.join(PLACEHOLDER_DIR, normalizedPath);
+      const placeholderPath = path.join(
+        PLACEHOLDER_DIR,
+        `${removeExtension(normalizedPath)}.txt`
+      );
 
       if (fs.existsSync(placeholderPath)) {
         logger.log(`✓ Placeholder exists for ${relativePath}`);
@@ -59,14 +63,16 @@ async function generatePlaceholders() {
 
       logger.log(`Generating placeholder for ${relativePath}...`);
 
-      const base64 = await generatePlaceholder(imagePath);
+      const dataUrl = await generatePlaceholder(imagePath);
 
       const placeholderDir = path.dirname(placeholderPath);
+
       if (!fs.existsSync(placeholderDir)) {
         fs.mkdirSync(placeholderDir, { recursive: true });
       }
 
-      fs.writeFileSync(placeholderPath, base64);
+      fs.writeFileSync(placeholderPath, dataUrl);
+
       logger.log(`✓ Created placeholder for ${relativePath}`);
     } catch (error) {
       missingPlaceholders++;

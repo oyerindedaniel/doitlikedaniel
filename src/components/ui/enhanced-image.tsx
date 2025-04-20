@@ -25,6 +25,7 @@ export function EnhancedImage({
 }: EnhancedImageProps) {
   const [error, setError] = useState(false);
 
+  // TODO: remove, might not be needed
   const showLoading = !skipPlaceholder;
 
   const blurDataURL = useMemo(() => {
