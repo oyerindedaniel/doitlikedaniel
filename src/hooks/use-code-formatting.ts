@@ -6,8 +6,8 @@ import { CodeEditorProps } from "@/components/mdx/monaco-code-editor";
 
 interface UseCodeFormattingProps
   extends Pick<CodeEditorProps, "editable" | "language" | "filename"> {
-  initialCode: string;
-  id: string;
+  initialCode: CodeEditorProps["code"];
+  id: CodeEditorProps["instanceId"];
 }
 
 export function useCodeFormatting({
@@ -18,7 +18,7 @@ export function useCodeFormatting({
   editable = false,
 }: UseCodeFormattingProps) {
   const [code, setCode] = useState(initialCode?.trim() || "");
-  const [pendingFormat, setPendingFormat] = useState(true);
+  const [pendingFormat, setPendingFormat] = useState(false);
   const editorRef = useRef<Monaco.editor.IStandaloneCodeEditor | null>(null);
 
   const formatAndSetCode = useCallback(

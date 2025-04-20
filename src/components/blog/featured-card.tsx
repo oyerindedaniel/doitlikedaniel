@@ -1,8 +1,8 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { MetaItem } from "@/components/ui/meta-item";
 import { PostMeta } from "@/types/mdx";
+import { EnhancedImage } from "../ui/enhanced-image";
 
 export interface FeaturedPostProps {
   post: PostMeta;
@@ -23,7 +23,7 @@ export function FeaturedCard({ post }: FeaturedPostProps) {
         {/* Image column */}
         <div className="relative aspect-[4/3] w-full overflow-hidden rounded-sm bg-gray-50 md:aspect-auto md:h-full dark:bg-gray-900">
           {post.coverImage ? (
-            <Image
+            <EnhancedImage
               src={post.coverImage}
               alt={post.title}
               fill

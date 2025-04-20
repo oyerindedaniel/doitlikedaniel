@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import { EnhancedImage } from "@/components/ui/enhanced-image";
 import { PostMeta } from "@/types/mdx";
 import { Badge } from "@/components/ui/badge";
 import { MetaItem } from "../ui/meta-item";
@@ -16,7 +16,7 @@ export default function BlogPost({ post }: BlogPostProps) {
         {post.coverImage ? (
           <div className="col-span-12 sm:col-span-3">
             <div className="relative aspect-[4/3] w-full overflow-hidden rounded bg-gray-100 dark:bg-gray-800">
-              <Image
+              <EnhancedImage
                 src={post.coverImage}
                 alt={post.title}
                 fill
@@ -36,7 +36,7 @@ export default function BlogPost({ post }: BlogPostProps) {
           }`}
         >
           {/* Metadata */}
-          <div className="mb-2 flex flex-wrap items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+          <div className="mb-3 flex flex-wrap items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
             {/* Date with icon */}
             <MetaItem
               icon={

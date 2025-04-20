@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { EnhancedImage } from "../ui/enhanced-image";
 import { CustomImageProps } from "@/types/mdx";
 
 export default function CustomImage({
@@ -24,7 +24,7 @@ export default function CustomImage({
   // For local images
   return (
     <span className="inline-block relative my-3 overflow-hidden rounded-sm">
-      <Image
+      <EnhancedImage
         src={src}
         alt={alt || "Blog image"}
         width={width}

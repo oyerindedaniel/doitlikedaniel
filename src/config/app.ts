@@ -1,9 +1,19 @@
 // Environment flags
-export const isProduction = process.env.NODE_ENV === "production";
-export const isDevelopment = process.env.NODE_ENV === "development";
-export const isTest = process.env.NODE_ENV === "test";
+const IS_PRODUCTION = process.env.NODE_ENV === "production";
+const IS_DEVELOPMENT = process.env.NODE_ENV === "development";
+const IS_TEST = process.env.NODE_ENV === "test";
+
+const ENFORCE_PLACEHOLDERS = process.env.ENFORCE_PLACEHOLDERS === "true";
 
 // PostHog configuration
-export const posthogConfig = {
-  enabled: isProduction && !!process.env.NEXT_PUBLIC_POSTHOG_KEY,
+const POSTHOG_CONFIG = {
+  enabled: IS_PRODUCTION && !!process.env.NEXT_PUBLIC_POSTHOG_KEY,
+};
+
+export {
+  IS_PRODUCTION,
+  IS_DEVELOPMENT,
+  IS_TEST,
+  ENFORCE_PLACEHOLDERS,
+  POSTHOG_CONFIG,
 };
