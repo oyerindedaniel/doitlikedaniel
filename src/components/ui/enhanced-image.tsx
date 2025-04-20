@@ -31,7 +31,6 @@ export function EnhancedImage({
     if (skipPlaceholder || isRemoteImage(src)) return undefined;
 
     try {
-      console.log("getPlaceholderPath", getPlaceholderPath(src));
       return getPlaceholderPath(src);
     } catch (err) {
       logger.warn(`Error getting placeholder for ${src}:`, err);
