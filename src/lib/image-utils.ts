@@ -9,7 +9,7 @@ export function removeExtension(src: string): string {
 }
 
 /**
- * Normalize a path by replacing backslashes with forward slashes
+ * Normalizes a path by replacing backslashes with forward slashes
  * @param path - The path to normalize
  * @returns The normalized path
  */
@@ -41,15 +41,4 @@ export function normalizeImagePath(src: string): string {
   }
 
   return src;
-}
-
-export function getPlaceholderPath(src: string): string {
-  if (isRemoteImage(src)) {
-    throw new Error(`Cannot get placeholder for remote image: ${src}`);
-  }
-
-  const cleanSrc = src.split("?")[0];
-  const relativePath = normalizeImagePath(cleanSrc);
-
-  return `/placeholders/${removeExtension(relativePath)}.txt`;
 }

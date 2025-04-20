@@ -1,10 +1,10 @@
 "use client";
 
 import Image, { ImageProps } from "next/image";
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { cn } from "@/lib/utils";
-import { getPlaceholderPath, isRemoteImage } from "@/lib/image-utils";
-import logger from "@/utils/logger";
+import { isRemoteImage } from "@/lib/image-utils";
+import { getBlurDataURL } from "@/generated/placeholder-map";
 import { IS_DEVELOPMENT } from "@/config/app";
 
 export interface EnhancedImageProps extends Omit<ImageProps, "src"> {
@@ -24,23 +24,12 @@ export function EnhancedImage({
   ...props
 }: EnhancedImageProps) {
   const [error, setError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // TODO: remove, might not be needed
-  const showLoading = !skipPlaceholder;
+  const blurDataURL =
+    !skipPlaceholder && !isRemoteImage(src) ? getBlurDataURL(src) : undefined;
 
-  const blurDataURL = useMemo(() => {
-    if (skipPlaceholder || isRemoteImage(src)) return undefined;
-
-    try {
-      return getPlaceholderPath(src);
-    } catch (err) {
-      logger.warn(`Error getting placeholder for ${src}:`, err);
-      return undefined;
-    }
-  }, [src, skipPlaceholder]);
-
-  const imageSrc =
-    error && fallback ? fallback : isRemoteImage(src) ? src : src;
+  const imageSrc = error && fallback ? fallback : src;
 
   const handleError = () => {
     if (fallback) {
@@ -48,10 +37,15 @@ export function EnhancedImage({
     }
   };
 
+  const handleLoad = () => {
+    setIsLoading(false);
+  };
+
   return (
     <>
-      {showLoading && !blurDataURL && (
-        <div className="absolute inset-0 bg-gray-200 dark:bg-gray-800 animate-shimmer rounded-md" />
+      {isLoading && !blurDataURL && !skipPlaceholder && (
+        // TODO: review this shimmer not working
+        <div className="h-4 w-32 bg-gray-200 dark:bg-gray-800 animate-shimmer rounded-md" />
       )}
       <Image
         src={imageSrc}
@@ -62,6 +56,7 @@ export function EnhancedImage({
         placeholder={blurDataURL ? "blur" : "empty"}
         blurDataURL={blurDataURL}
         onError={handleError}
+        onLoad={handleLoad}
         {...props}
       />
     </>
