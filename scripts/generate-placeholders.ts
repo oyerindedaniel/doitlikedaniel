@@ -1,14 +1,36 @@
 import path from "path";
 import fs from "fs";
 import { glob } from "glob";
-import { IMAGES_DIR, generatePlaceholder } from "../src/lib/image-utils.server";
+import { IMAGES_DIR, generatePlaceholder } from "@/lib/image-utils.server";
 import logger from "@/utils/logger";
-import { joinGlobPath, normalizePath } from "../src/lib/image-utils";
+import { joinGlobPath, normalizePath } from "@/lib/image-utils";
 import { IS_PRODUCTION, ENFORCE_PLACEHOLDERS } from "@/config/app";
 import type { PlaceholderMap } from "@/generated/placeholder-map";
+import { normalizeAppError } from "@/utils/errors";
+
+// Placeholder file path
+const PLACEHOLDER_MAP_PATH = path.join(
+  process.cwd(),
+  "src/generated/placeholders.json"
+);
 
 async function generatePlaceholders() {
   logger.log("Starting placeholder generation...");
+
+  let existingPlaceholders: PlaceholderMap = {};
+  try {
+    if (fs.existsSync(PLACEHOLDER_MAP_PATH)) {
+      const existingData = fs.readFileSync(PLACEHOLDER_MAP_PATH, "utf-8");
+      existingPlaceholders = JSON.parse(existingData);
+      logger.log(
+        `Loaded ${Object.keys(existingPlaceholders).length} existing placeholders`
+      );
+    }
+  } catch (error) {
+    logger.warn(
+      `Failed to load existing placeholders: ${normalizeAppError(error).message}`
+    );
+  }
 
   const imagePattern = joinGlobPath(
     IMAGES_DIR,
@@ -20,9 +42,10 @@ async function generatePlaceholders() {
   logger.log(`Found ${imageFiles.length} image files to process`);
 
   let missingPlaceholders = 0;
+  let skippedPlaceholders = 0;
   const errors: string[] = [];
 
-  const placeholderMap: PlaceholderMap = {};
+  const placeholderMap: PlaceholderMap = { ...existingPlaceholders };
 
   for (const imagePath of imageFiles) {
     try {
@@ -34,6 +57,15 @@ async function generatePlaceholders() {
       }
 
       const normalizedPath = normalizePath(relativePath);
+
+      const cacheKey = `${normalizedPath}`;
+
+      if (cacheKey in existingPlaceholders) {
+        logger.log(`✓ Reusing existing placeholder for ${normalizedPath}`);
+        placeholderMap[cacheKey] = existingPlaceholders[cacheKey];
+        skippedPlaceholders++;
+        continue;
+      }
 
       logger.debug("Placeholder generation", {
         imagePath,
@@ -50,28 +82,30 @@ async function generatePlaceholders() {
       logger.log(`✓ Created placeholder for ${normalizedPath}`);
     } catch (error) {
       missingPlaceholders++;
-      const errorMessage = `Failed to generate placeholder for ${imagePath}: ${error instanceof Error ? error.message : "Unknown error"}`;
+      const errorMessage = `Failed to generate placeholder for ${imagePath}: ${normalizeAppError(error).message}`;
       errors.push(errorMessage);
       logger.error(`✗ ${errorMessage}`);
     }
   }
 
-  const placeholderMapPath = path.join(
-    process.cwd(),
-    "src/generated/placeholders.json"
-  );
-
-  const placeholderMapDir = path.dirname(placeholderMapPath);
+  const placeholderMapDir = path.dirname(PLACEHOLDER_MAP_PATH);
   if (!fs.existsSync(placeholderMapDir)) {
     fs.mkdirSync(placeholderMapDir, { recursive: true });
   }
 
-  fs.writeFileSync(placeholderMapPath, JSON.stringify(placeholderMap, null, 2));
+  fs.writeFileSync(
+    PLACEHOLDER_MAP_PATH,
+    JSON.stringify(placeholderMap, null, 2)
+  );
 
-  logger.log(`✓ Wrote placeholder map to ${placeholderMapPath}`);
+  logger.log(`✓ Wrote placeholder map to ${PLACEHOLDER_MAP_PATH}`);
 
   logger.log("\nPlaceholder Generation Summary:");
   logger.log(`Total images: ${imageFiles.length}`);
+  logger.log(`Reused placeholders: ${skippedPlaceholders}`);
+  logger.log(
+    `Newly generated: ${imageFiles.length - skippedPlaceholders - missingPlaceholders}`
+  );
   logger.log(`Missing placeholders: ${missingPlaceholders}`);
 
   if (missingPlaceholders > 0) {
