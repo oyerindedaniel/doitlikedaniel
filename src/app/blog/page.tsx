@@ -7,7 +7,7 @@ import { isSystemError, normalizeAppError, SystemError } from "@/utils/errors";
 import { logServerError } from "@/lib/telemetry/posthog.server";
 
 export const metadata: Metadata = {
-  title: "Blog | Daniel's Personal Site",
+  title: "Blog",
   description:
     "Read my latest thoughts, tutorials, and insights on web development, design, and technology",
 };

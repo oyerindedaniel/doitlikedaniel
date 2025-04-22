@@ -27,7 +27,9 @@ export async function generateMetadata({
     const { meta } = await getPostBySlug(slug);
 
     return {
-      title: `${meta.title} | Blog`,
+      title: {
+        absolute: `${meta.title} | Daniel's Blog`,
+      },
       description: meta.excerpt,
       openGraph: {
         title: meta.title,

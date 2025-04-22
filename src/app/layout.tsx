@@ -30,12 +30,21 @@ export const metadata: Metadata = {
     title: siteConfig.title.default,
     description: siteConfig.description,
     siteName: siteConfig.name,
+    images: [
+      {
+        url: "",
+        width: 1200,
+        height: 630,
+        alt: siteConfig.title.default,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: siteConfig.title.default,
     description: siteConfig.description,
     creator: siteConfig.author.twitter,
+    images: [""],
   },
 };
 

@@ -45,7 +45,7 @@ export function EnhancedImage({
     <>
       {isLoading && !blurDataURL && !skipPlaceholder && (
         // TODO: review this shimmer not working
-        <div className="h-4 w-32 bg-gray-200 dark:bg-gray-800 animate-shimmer rounded-md" />
+        <div className="inset-0 absolute bg-gray-200 dark:bg-gray-800 animate-shimmer rounded-md" />
       )}
       <Image
         src={imageSrc}
