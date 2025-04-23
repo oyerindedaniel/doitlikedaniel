@@ -90,7 +90,7 @@ export function FeaturedCard({ post }: FeaturedPostProps) {
             )}
           </div>
 
-          <h2 className="mb-3 text-2xl font-medium tracking-tight text-gray-900 dark:text-white">
+          <h2 className="mb-3 text-2xl font-medium tracking-tight leading-tight  text-gray-900 dark:text-white">
             <Link
               href={`/blog/${post.slug}`}
               className="hover:text-blue-500 dark:hover:text-blue-400"

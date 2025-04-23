@@ -86,7 +86,7 @@ export default function BlogPost({ post }: BlogPostProps) {
           </div>
 
           {/* Title */}
-          <h2 className="mb-2 text-xl font-medium tracking-tight text-gray-900 dark:text-white">
+          <h2 className="mb-2 text-xl font-medium tracking-tight leading-tight text-gray-900 dark:text-white">
             <Link
               href={`/blog/${post.slug}`}
               className="after:absolute after:inset-0 hover:text-blue-500 dark:hover:text-blue-400"

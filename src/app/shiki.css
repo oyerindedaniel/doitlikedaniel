@@ -128,11 +128,6 @@ span.shiki:has(> code) {
   border-left: 2px solid #3b82f6;
 }
 
-/* Ensure code lines have proper spacing */
-.shiki .line {
-  padding-right: 1rem;
-}
-
 /* Diff syntax highlighting */
 .shiki .line.diff.add {
   background-color: rgba(16, 185, 129, 0.15);
