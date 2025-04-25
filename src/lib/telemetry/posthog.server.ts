@@ -17,8 +17,7 @@ const serverPosthog = IS_PRODUCTION
 
 export function logServerError(
   error: Error,
-  distinctId: string = "server",
-  options?: { internal?: boolean }
+  distinctId: string = "server"
 ): void {
   if (!IS_PRODUCTION || !serverPosthog) {
     logger.error("Error:", error);
@@ -35,17 +34,5 @@ export function logServerError(
   } catch (posthogError) {
     logger.error("PostHog capture failed:", posthogError);
     logger.error("Original error:", error);
-
-    // if (!options?.internal) {
-    //   logServerError(
-    //     new SystemError("PostHog capture failed", {
-    //       data: {
-    //         originalError: normalizeAppError(posthogError),
-    //       },
-    //     }),
-    //     "server",
-    //     { internal: true }
-    //   );
-    // }
   }
 }

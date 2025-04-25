@@ -33,7 +33,6 @@
   /* Font tokens */
   --font-inter: var(--font-inter);
   /* --font-serif: var(--font-serif); */
-  /* --font-merriweather: var(--font-merriweather); */
   /* --font-sourceserif: var(--font-sourceserif); */
   /* --font-lora: var(--font-lora); */
   --font-manrope: var(--font-manrope);
@@ -155,8 +154,8 @@
   h4,
   h5,
   h6 {
-    font-family: var(--font-serif);
-    /* font-weight: bold; */
+    font-family: var(--font-manrope);
+    letter-spacing: -0.02em;
   }
 }
 

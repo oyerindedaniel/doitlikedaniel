@@ -43,7 +43,6 @@ export function TableOfContents() {
 
     setHeadings(items);
 
-    // Initialize the visibility map
     const visibleMap = new Map<string, boolean>();
     items.forEach((item) => {
       visibleMap.set(item.id, false);
@@ -51,7 +50,6 @@ export function TableOfContents() {
     visibleHeadingsRef.current = visibleMap;
   }, []);
 
-  // Determine active headings based on visibility
   const updateActiveHeadings = useCallback(() => {
     if (headings.length === 0) return;
 
@@ -66,11 +64,9 @@ export function TableOfContents() {
     }
   }, [headings]);
 
-  // Set up IntersectionObserver
   useEffect(() => {
     if (headings.length === 0) return;
 
-    // IntersectionObserver callback
     const handleIntersection = (entries: IntersectionObserverEntry[]) => {
       let hasChanges = false;
 

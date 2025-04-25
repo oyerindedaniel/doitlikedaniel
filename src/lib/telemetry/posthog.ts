@@ -47,7 +47,7 @@ export function capturePageView(url: string, context?: PageViewContext) {
 /**
  * Log a client error event to PostHog
  */
-export function logClientError(error: Error, options?: { internal?: boolean }) {
+export function logClientError(error: Error) {
   if (!IS_PRODUCTION || !posthog) return;
 
   // TODO: consider adding a group
@@ -56,17 +56,6 @@ export function logClientError(error: Error, options?: { internal?: boolean }) {
   } catch (posthogError) {
     logger.error("Failed to log client error to PostHog:", posthogError);
     logger.error("Original error:", error);
-
-    // if (!options?.internal) {
-    //   logClientError(
-    //     new SystemError("PostHog capture failed", {
-    //       data: {
-    //         originalError: normalizeAppError(posthogError),
-    //       },
-    //     }),
-    //     { internal: true }
-    //   );
-    // }
   }
 }
 

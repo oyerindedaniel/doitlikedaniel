@@ -3,12 +3,10 @@
  */
 
 import localFont from "next/font/local";
-import {
-  // Source_Serif_4 as SourceSerif,
-  Inter,
-  // Lora,
-  // Merriweather,
-} from "next/font/google";
+import {} from // Source_Serif_4 as SourceSerif,
+// Inter,
+// Lora,
+"next/font/google";
 
 const manrope = localFont({
   src: [
@@ -59,12 +57,12 @@ const manrope = localFont({
 //   weight: ["400", "500", "600", "700"],
 // });
 
-export const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-  weight: ["400", "500", "600", "700"],
-});
+// export const inter = Inter({
+//   subsets: ["latin"],
+//   variable: "--font-inter",
+//   display: "swap",
+//   weight: ["400", "500", "600", "700"],
+// });
 
 // export const loraSerif = Lora({
 //   subsets: ["latin"],
@@ -73,13 +71,6 @@ export const inter = Inter({
 //   weight: ["400", "500", "600", "700"],
 // });
 
-// export const merriweather = Merriweather({
-//   subsets: ["latin"],
-//   variable: "--font-merriweather",
-//   display: "swap",
-//   weight: ["300", "400", "700", "900"],
-// });
-
 // export const fontVariables = `${serif.variable} ${inter.variable} ${loraSerif.variable} ${merriweather.variable} ${manrope.variable}`;
 
-export const fontVariables = `${manrope.variable} ${inter.variable}`;
+export const fontVariables = `${manrope.variable}`;

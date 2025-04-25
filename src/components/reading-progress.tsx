@@ -53,25 +53,26 @@ export function ReadingProgress({ className }: ReadingProgressProps) {
     };
   }, []);
 
-  const progressClasses = cn(
-    "h-1 transition-all transform origin-left ease-out duration-300",
-    "bg-gradient-to-r from-blue-600 to-indigo-500 dark:from-blue-500 dark:to-purple-600",
-    {
-      "opacity-0 scale-x-0": !isVisible,
-      "opacity-100 scale-x-100": isVisible,
-    },
-    className
-  );
-
-  const containerClasses = cn(
-    "fixed top-0 left-0 w-full z-50 transition-opacity duration-300",
-    !isVisible && "opacity-0",
-    isVisible && "opacity-100"
-  );
-
   return (
-    <div className={containerClasses}>
-      <div className={progressClasses} style={{ width: `${progress}%` }} />
+    <div
+      className={cn(
+        "fixed top-0 left-0 w-full z-50 transition-opacity duration-300",
+        !isVisible && "opacity-0",
+        isVisible && "opacity-100"
+      )}
+    >
+      <div
+        className={cn(
+          "h-1 transition-all transform origin-left ease-out duration-300",
+          "bg-gradient-to-r from-blue-600 to-indigo-500 dark:from-blue-500 dark:to-purple-600",
+          {
+            "opacity-0 scale-x-0": !isVisible,
+            "opacity-100 scale-x-100": isVisible,
+          },
+          className
+        )}
+        style={{ width: `${progress}%` }}
+      />
 
       {/* Shadow effect */}
       <div
