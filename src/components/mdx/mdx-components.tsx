@@ -50,7 +50,7 @@ export const mdxComponents = {
   // Image,
   h1: ({ children, ...props }: ComponentProps) => (
     <h1
-      className="text-2xl font-normal leading-tight  text-slate-900 dark:text-slate-50"
+      className="text-2xl leading-tight  text-slate-900 dark:text-slate-50"
       {...props}
     >
       {children}
@@ -58,7 +58,7 @@ export const mdxComponents = {
   ),
   h2: ({ children, ...props }: ComponentProps) => (
     <h2
-      className="mt-6 text-xl font-normal leading-tight  text-slate-800 dark:text-slate-100"
+      className="mt-6 text-xl leading-tight  text-slate-800 dark:text-slate-100"
       {...props}
     >
       {children}
@@ -66,7 +66,7 @@ export const mdxComponents = {
   ),
   h3: ({ children, ...props }: ComponentProps) => (
     <h3
-      className="mt-6 text-lg font-normal leading-tight  text-slate-800 dark:text-slate-100"
+      className="mt-6 text-lg leading-tight  text-slate-800 dark:text-slate-100"
       {...props}
     >
       {children}
@@ -74,7 +74,7 @@ export const mdxComponents = {
   ),
   h4: ({ children, ...props }: ComponentProps) => (
     <h4
-      className="mt-6 text-md font-normal leading-tight text-slate-800 dark:text-slate-200"
+      className="mt-6 text-md leading-tight text-slate-800 dark:text-slate-200"
       {...props}
     >
       {children}
