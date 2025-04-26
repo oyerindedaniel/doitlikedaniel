@@ -35,12 +35,6 @@ export default function BlogPage() {
                 {remainingPosts.map((post) => (
                   <BlogPost key={post.slug} post={post} />
                 ))}
-                {remainingPosts.length > 0 && featuredPost && (
-                  <BlogPost key={featuredPost.slug} post={featuredPost} />
-                )}
-                {remainingPosts.length === 0 && featuredPost && (
-                  <BlogPost key={featuredPost.slug} post={featuredPost} />
-                )}
               </div>
             ) : (
               <div className="rounded-sm border border-gray-100 bg-white/50 p-8 text-center shadow-sm dark:border-gray-800 dark:bg-gray-900/30">

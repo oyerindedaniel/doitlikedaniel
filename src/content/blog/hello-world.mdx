@@ -8,7 +8,7 @@ coverImage: "/images/large-image.jpg"
 readingTime: "3 min read"
 ---
 
-# Welcome to My MDX Blog
+## Welcome to My MDX Blog
 
 This is a test post for my MDX-powered blog. MDX combines the power of Markdown with JSX components.
 
@@ -29,7 +29,7 @@ console.log(greeting("World"));
 
 One of the coolest features of this blog is the ability to show TypeScript code with type information. Hover over variables and functions to see their types:
 
-<MonacoCodeBlock filename="types-example.ts" id="user-interface-example" language="typescript">
+<MonacoCodeBlock filename="types-example.ts" id="user-interface-example" language="typescript" height="400px">
 {`// TypeScript interface definition
 interface User {
   id: number;
@@ -64,7 +64,7 @@ console.log(displayName); // Output: "Daniel (Admin)"
 
 You can even make the editor interactive, allowing you to edit and experiment with the code:
 
-<MonacoCodeBlock filename="interactive-example.ts" editable={true} height="350px" id="todo-item-example" language="typescript">
+<MonacoCodeBlock filename="interactive-example.ts" editable={true} height="550px" id="todo-item-example" language="typescript">
 {`// Todo Item Example - Try editing this code!
 // - Change the type definition
 // - Add new class methods
@@ -152,7 +152,7 @@ You can include images in your MDX posts:
 
 One of the best features of MDX is the ability to use React components within your content:
 
-<Alert title="Important Information">
+<Alert title="Important Information" variant="error">
   This is an alert component that can be reused throughout your MDX content.
 </Alert>
 

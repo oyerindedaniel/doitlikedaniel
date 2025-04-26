@@ -202,7 +202,7 @@ export default async function BlogPostPage({
               </div>
 
               {/* Title */}
-              <h1 className="mb-2 text-3xl font-normal leading-tight text-slate-900 dark:text-white sm:text-3xl">
+              <h1 className="mb-2 text-3xl leading-tight text-slate-900 dark:text-white sm:text-3xl">
                 {meta.title}
               </h1>
 

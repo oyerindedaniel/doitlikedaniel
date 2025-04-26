@@ -79,7 +79,7 @@ export default function RootLayout({
         )}
       </head>
       <body
-        className={`${fontVariables} antialiased min-h-dvh h-full flex flex-col font-inter overflow-x-hidden`}
+        className={`${fontVariables} antialiased min-h-dvh h-full flex flex-col font-manrope overflow-x-hidden`}
       >
         <TooltipProvider delayDuration={250}>
           <PHProvider>
