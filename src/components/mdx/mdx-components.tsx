@@ -15,6 +15,7 @@ import { SmartPre } from "./smart-code-block";
 import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
 import rehypeShiki from "@shikijs/rehype";
+import rehypeUnwrapImages from "rehype-unwrap-images";
 import { shikiConfig } from "@/config/shiki";
 import {
   transformerNotationDiff,
@@ -50,7 +51,7 @@ export const mdxComponents = {
   // Image,
   h1: ({ children, ...props }: ComponentProps) => (
     <h1
-      className="text-2xl leading-tight  text-slate-900 dark:text-slate-50"
+      className="text-2xl leading-tight text-slate-900 dark:text-slate-50"
       {...props}
     >
       {children}
@@ -189,6 +190,7 @@ export const mdxOptions: MDXRemoteProps["options"] = {
     rehypePlugins: [
       // Additional rehype plugins added here
       rehypeSlug,
+      rehypeUnwrapImages,
       [
         rehypeShiki,
         {

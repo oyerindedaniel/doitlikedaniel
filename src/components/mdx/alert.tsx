@@ -3,7 +3,7 @@
 import { ReactNode } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 
-const alertVariants = cva("relative my-6 px-4 py-3 rounded-sm border text-sm", {
+const alertVariants = cva("relative my-3 px-4 py-3 rounded-sm border text-sm", {
   variants: {
     variant: {
       info: "bg-blue-50/80 border-blue-200 text-blue-800 dark:bg-blue-950/50 dark:border-blue-900 dark:text-blue-300",

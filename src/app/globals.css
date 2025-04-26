@@ -155,7 +155,7 @@
   h5,
   h6 {
     font-family: var(--font-manrope);
-    font-weight: 500 !important;
+    font-weight: 600 !important;
     letter-spacing: -0.02em;
   }
 }
