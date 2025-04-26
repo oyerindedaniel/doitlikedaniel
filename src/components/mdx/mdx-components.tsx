@@ -82,7 +82,7 @@ export const mdxComponents = {
   ),
   p: ({ children, ...props }: ComponentProps) => (
     <p
-      className="mt-1.5 mb-4 text-slate-700 text-[0.9rem] md:text-base dark:text-slate-300 leading-relaxed"
+      className="mt-2 mb-4 text-slate-700 text-[0.95rem] md:text-base dark:text-slate-300 leading-relaxed"
       {...props}
     >
       {children}
