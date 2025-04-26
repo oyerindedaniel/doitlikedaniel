@@ -38,9 +38,14 @@ export function MonacoLoader({
       </div>
 
       {/* Editor content simulation */}
-      <div className={cn("p-4 h-full space-y-3", "bg-white dark:bg-zinc-950")}>
+      <div
+        className={cn(
+          "p-4 h-full space-y-3 overflow-hidden",
+          "bg-white dark:bg-zinc-950"
+        )}
+      >
         {/* Line numbers and code lines simulation */}
-        {Array.from({ length: 10 }).map((_, i) => (
+        {Array.from({ length: 20 }).map((_, i) => (
           <div key={i} className="flex gap-4">
             <div
               className={cn(

@@ -10,7 +10,7 @@ export function YoutubeEmbed({
   title = "YouTube video",
 }: YoutubeEmbedProps) {
   return (
-    <div className="my-6 aspect-video overflow-hidden rounded-sm">
+    <div className="my-3 aspect-video overflow-hidden rounded-sm">
       <iframe
         className="h-full w-full"
         src={`https://www.youtube.com/embed/${id}`}
