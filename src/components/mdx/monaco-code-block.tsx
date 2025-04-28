@@ -6,11 +6,7 @@ import { CopyCodeButton } from "../copy-code-button";
 import { MonacoLoader } from "../monaco-loader";
 import type * as Monaco from "monaco-editor";
 import { useCodeFormatting } from "@/hooks/use-code-formatting";
-import {
-  getPlatformKeyText,
-  usePlatform,
-  getPlatformKeybinding,
-} from "@/hooks/use-platform";
+import { getPlatformKeyText } from "@/hooks/use-platform";
 import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import { SaveIcon, WandSparkles } from "lucide-react";
@@ -52,16 +48,13 @@ export const MonacoCodeBlock = memo(function MonacoCodeBlock({
 }: MonacoCodeBlockProps) {
   const generatedId = useId();
   const blockId = id || `monaco-block-${generatedId}`;
-  const platform = usePlatform();
 
   const {
     code,
     formatAndSetCode,
     handleEditorDidMount,
     handleCodeChange,
-    editorRef,
     pendingFormat,
-    setPendingFormat,
   } = useCodeFormatting({
     initialCode: children,
     language,
@@ -77,45 +70,11 @@ export const MonacoCodeBlock = memo(function MonacoCodeBlock({
     "Ctrl+Shift+F" // Linux
   );
 
-  const handleFormatCommand = useCallback(async () => {
-    if (editorRef.current) {
-      const currentValue = editorRef.current.getValue();
-      if (currentValue) {
-        await formatAndSetCode(currentValue);
-      }
-    }
-  }, [formatAndSetCode, editorRef]);
-
-  //   const shortcutKeys =
-  //     platform === "mac"
-  //       ? "meta+shift+f"
-  //       : platform === "linux"
-  //         ? "ctrl+shift+f"
-  //         : "alt+shift+f";
-
-  //   useHotkeys(shortcutKeys, handleFormatCommand, {
-  //     enableOnFormElements: true,
-  //     enableOnContentEditable: true,
-  //   });
-
   const handleEditorMount = useCallback(
     (editor: Monaco.editor.IStandaloneCodeEditor) => {
       handleEditorDidMount(editor);
-
-      const keybindings = getPlatformKeybinding(platform);
-
-      editor.addAction({
-        id: "format-document",
-        label: "Format Document",
-        keybindings: keybindings.formatKeys,
-        run: async () => {
-          await handleFormatCommand();
-          setPendingFormat(false);
-          return;
-        },
-      });
     },
-    [handleEditorDidMount, handleFormatCommand, platform, setPendingFormat]
+    [handleEditorDidMount]
   );
 
   return (
@@ -146,9 +105,10 @@ export const MonacoCodeBlock = memo(function MonacoCodeBlock({
               <TooltipTrigger asChild>
                 <Button
                   className="w-7 h-7"
-                  onClick={handleFormatCommand}
+                  onClick={() => formatAndSetCode()}
                   variant="gradient"
                   size="icon"
+                  disabled={!pendingFormat}
                 >
                   {pendingFormat ? (
                     <SaveIcon aria-hidden className="h-4 w-4" />

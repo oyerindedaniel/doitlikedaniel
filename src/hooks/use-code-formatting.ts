@@ -3,6 +3,9 @@ import { formatCode } from "@/utils/code-formatter";
 import logger from "@/utils/logger";
 import type * as Monaco from "monaco-editor";
 import { CodeEditorProps } from "@/components/mdx/monaco-code-editor";
+import { getPlatformKeybinding } from "./use-platform";
+import { usePlatform } from "./use-platform";
+import { useLatestValue } from "./use-latest-value";
 
 interface UseCodeFormattingProps
   extends Pick<CodeEditorProps, "editable" | "language" | "filename"> {
@@ -19,11 +22,16 @@ export function useCodeFormatting({
 }: UseCodeFormattingProps) {
   const [code, setCode] = useState(initialCode?.trim() || "");
   const [pendingFormat, setPendingFormat] = useState(false);
+  const pendingFormatRef = useLatestValue(pendingFormat);
   const editorRef = useRef<Monaco.editor.IStandaloneCodeEditor | null>(null);
+  const platform = usePlatform();
 
   const formatAndSetCode = useCallback(
-    async (codeToFormat: string) => {
-      if (!codeToFormat) return;
+    async (code?: string) => {
+      console.log("did reach here");
+      const codeToFormat = code ?? editorRef.current?.getValue();
+
+      if (!codeToFormat || !codeToFormat.trim()) return;
 
       const formattedCode = await formatCode(codeToFormat.trim(), { language });
       if (codeToFormat.trim() !== formattedCode) {
@@ -40,10 +48,16 @@ export function useCodeFormatting({
   );
 
   useEffect(() => {
-    if (initialCode?.trim()) {
-      formatAndSetCode(initialCode);
-    }
+    (async () => {
+      if (initialCode?.trim()) {
+        await formatAndSetCode(initialCode);
+      }
+    })();
   }, [initialCode, formatAndSetCode]);
+
+  const keybindings = getPlatformKeybinding(platform);
+
+  console.log("pendingFormat", pendingFormat);
 
   const handleEditorDidMount = useCallback(
     (editor: Monaco.editor.IStandaloneCodeEditor) => {
@@ -53,20 +67,31 @@ export function useCodeFormatting({
         // Editor gained focus
       });
 
-      editor.onDidBlurEditorText(() => {
+      editor.onDidBlurEditorText(async () => {
         // Format on blur if there are pending changes
-        if (pendingFormat && editable) {
-          const currentValue = editor.getValue();
-          formatAndSetCode(currentValue);
+        if (pendingFormatRef.current && editable) {
+          await formatAndSetCode();
         }
       });
+
+      console.log("bitch are");
+      editor.addAction({
+        id: "format-document",
+        label: "Format Document",
+        keybindings: keybindings.formatKeys,
+        run: async () => {
+          await formatAndSetCode();
+        },
+      });
     },
-    [pendingFormat, formatAndSetCode, editable]
+    [keybindings.formatKeys, pendingFormatRef, editable, formatAndSetCode]
   );
 
   const handleCodeChange = useCallback(
     (newCode: string) => {
       if (!newCode) return;
+
+      console.log("in handleCodeChange");
 
       setCode(newCode);
 

@@ -64,21 +64,21 @@ export function getPlatformKeybinding(platform: Platform): {
   const SHIFT = 512;
   const CTRL = 1024;
   const CMD = 256;
-  const KEY_F = 36;
+  const KEY_B = 31;
 
   switch (platform) {
     case "mac":
       return {
-        formatKeys: [CMD | SHIFT | KEY_F], // Command+Shift+F
+        formatKeys: [CMD | SHIFT | KEY_B], // Command+Shift+F
       };
     case "linux":
       return {
-        formatKeys: [CTRL | SHIFT | KEY_F], // Ctrl+Shift+F
+        formatKeys: [CTRL | SHIFT | KEY_B], // Ctrl+Shift+F
       };
     case "windows":
     default:
       return {
-        formatKeys: [ALT | SHIFT | KEY_F], // Alt+Shift+F
+        formatKeys: [ALT | SHIFT | KEY_B], // Alt+Shift+F
       };
   }
 }

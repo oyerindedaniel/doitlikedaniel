@@ -155,7 +155,7 @@
   h5,
   h6 {
     font-family: var(--font-manrope);
-    font-weight: 600 !important;
+    font-weight: 600;
     letter-spacing: -0.02em;
   }
 }
@@ -163,5 +163,6 @@
 @layer utilities {
   .serif-heading {
     font-family: var(--font-serif) !important;
+    font-weight: normal !important;
   }
 }

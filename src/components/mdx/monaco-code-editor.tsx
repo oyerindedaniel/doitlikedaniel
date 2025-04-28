@@ -156,7 +156,7 @@ export const MonacoCodeEditor = memo(function MonacoCodeEditor({
   useEffect(() => {
     return () => {
       if (editorRef.current) {
-        // Editor disposal is handled by Monaco
+        editorRef.current.dispose();
         editorRef.current = null;
       }
     };
