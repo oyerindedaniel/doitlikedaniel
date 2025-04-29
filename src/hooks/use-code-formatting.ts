@@ -3,9 +3,7 @@ import { formatCode } from "@/utils/code-formatter";
 import logger from "@/utils/logger";
 import type * as Monaco from "monaco-editor";
 import { CodeEditorProps } from "@/components/mdx/monaco-code-editor";
-import { getPlatformKeybinding } from "./use-platform";
-import { usePlatform } from "./use-platform";
-import { useLatestValue } from "./use-latest-value";
+import { useDebouncedCallback } from "./use-debounced-callback";
 
 interface UseCodeFormattingProps
   extends Pick<CodeEditorProps, "editable" | "language" | "filename"> {
@@ -20,29 +18,36 @@ export function useCodeFormatting({
   filename,
   editable = false,
 }: UseCodeFormattingProps) {
-  const [code, setCode] = useState(initialCode?.trim() || "");
-  const [pendingFormat, setPendingFormat] = useState(false);
-  const pendingFormatRef = useLatestValue(pendingFormat);
   const editorRef = useRef<Monaco.editor.IStandaloneCodeEditor | null>(null);
-  const platform = usePlatform();
+  const [code, setCode] = useState(initialCode?.trim() || "");
+  const pendingFormatRef = useRef(true);
+
+  /**
+   * Formats code using a custom formatter before the Monaco editor mounts.
+   * Used instead of `editor.getAction('editor.action.formatDocument').run()` because initial code
+   * needs to be formatted before the editor is initialized.
+   */
 
   const formatAndSetCode = useCallback(
     async (code?: string) => {
-      console.log("did reach here");
       const codeToFormat = code ?? editorRef.current?.getValue();
 
       if (!codeToFormat || !codeToFormat.trim()) return;
+      if (!pendingFormatRef.current) return;
 
       const formattedCode = await formatCode(codeToFormat.trim(), { language });
+
       if (codeToFormat.trim() !== formattedCode) {
         logger.debug(`Code was reformatted for ${filename || language}`, {
           id,
           formatted: true,
           language,
         });
+
+        setCode(formattedCode);
       }
-      setCode(formattedCode);
-      setPendingFormat(false);
+
+      pendingFormatRef.current = false;
     },
     [filename, id, language]
   );
@@ -54,10 +59,6 @@ export function useCodeFormatting({
       }
     })();
   }, [initialCode, formatAndSetCode]);
-
-  const keybindings = getPlatformKeybinding(platform);
-
-  console.log("pendingFormat", pendingFormat);
 
   const handleEditorDidMount = useCallback(
     (editor: Monaco.editor.IStandaloneCodeEditor) => {
@@ -73,43 +74,31 @@ export function useCodeFormatting({
           await formatAndSetCode();
         }
       });
-
-      console.log("bitch are");
-      editor.addAction({
-        id: "format-document",
-        label: "Format Document",
-        keybindings: keybindings.formatKeys,
-        run: async () => {
-          await formatAndSetCode();
-        },
-      });
     },
-    [keybindings.formatKeys, pendingFormatRef, editable, formatAndSetCode]
+    [pendingFormatRef, editable, formatAndSetCode]
   );
 
   const handleCodeChange = useCallback(
     (newCode: string) => {
       if (!newCode) return;
 
-      console.log("in handleCodeChange");
-
       setCode(newCode);
 
       if (editable) {
-        setPendingFormat(true);
+        pendingFormatRef.current = true;
       }
     },
     [editable]
   );
+
+  const debouncedHandleChange = useDebouncedCallback(handleCodeChange, 250);
 
   return {
     code,
     setCode,
     formatAndSetCode,
     handleEditorDidMount,
-    handleCodeChange,
+    handleCodeChange: debouncedHandleChange,
     editorRef,
-    pendingFormat,
-    setPendingFormat,
   };
 }

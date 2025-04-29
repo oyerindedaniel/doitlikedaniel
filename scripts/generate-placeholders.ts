@@ -8,6 +8,14 @@ import { IS_PRODUCTION, ENFORCE_PLACEHOLDERS } from "@/config/app";
 import type { PlaceholderMap } from "@/generated/placeholder-map";
 import { normalizeAppError } from "@/utils/errors";
 
+/**
+ * Generates base64 blur placeholders for local static images.
+ * Used even though Next.js supports automatic placeholders for static imports,
+ * to ensure consistent precomputed values and enforce blur support in production.
+ *
+ * Docs: https://nextjs.org/docs/app/building-your-application/optimizing/images#local-images
+ */
+
 // Placeholder file path
 const PLACEHOLDER_MAP_PATH = path.join(
   process.cwd(),

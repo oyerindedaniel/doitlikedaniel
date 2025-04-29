@@ -20,7 +20,7 @@ export default function CustomImage({
   if (isRemoteImage(src)) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
-      <img className="my-3" src={src} alt={alt || "Blog image"} {...props} />
+      <img className="my-4" src={src} alt={alt || "Blog image"} {...props} />
     );
   }
 
@@ -36,7 +36,7 @@ export default function CustomImage({
         height: "auto",
       }}
       sizes={sizes}
-      className="w-full rounded-sm my-3"
+      className="w-full rounded-sm my-4"
       {...props}
     />
   );
