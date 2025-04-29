@@ -14,7 +14,7 @@ export default function CodeBlock({
   const language = extractLanguage(className);
 
   return (
-    <div className="group relative rounded-md my-3">
+    <div className="group relative rounded-md my-4">
       {/* Language badge */}
       {language && <div className="code-language-indicator">{language}</div>}
 

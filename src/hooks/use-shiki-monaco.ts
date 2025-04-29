@@ -1,27 +1,18 @@
 import { useCallback, useEffect, useRef } from "react";
-import { createHighlighter } from "shiki";
 import { shikiToMonaco } from "@shikijs/monaco";
 import type * as Monaco from "monaco-editor";
 import { useTheme } from "next-themes";
-import type { Highlighter } from "shiki";
 import { shikiConfig } from "@/config/shiki";
+import { getGlobalHighlighter } from "@/lib/shiki";
 
 export function useShikiMonaco() {
-  const highlighterRef = useRef<Highlighter | null>(null);
   const monacoRef = useRef<typeof Monaco | null>(null);
   const { resolvedTheme } = useTheme();
 
-  async function initializeHighlighter() {
-    if (!highlighterRef.current) {
-      highlighterRef.current = await createHighlighter({
-        themes: [shikiConfig.themes.light, shikiConfig.themes.dark],
-        langs: shikiConfig.langs,
-      });
-    }
-  }
-
   useEffect(() => {
-    initializeHighlighter();
+    (async () => {
+      await getGlobalHighlighter();
+    })();
   }, []);
 
   const getShikiTheme = useCallback(() => {
@@ -42,18 +33,16 @@ export function useShikiMonaco() {
   }, []);
 
   const setupMonaco = async (monaco: typeof Monaco) => {
-    if (!highlighterRef.current) {
-      await initializeHighlighter();
-    }
+    const highlighter = await getGlobalHighlighter();
 
-    if (highlighterRef.current) {
+    if (highlighter) {
       monacoRef.current = monaco;
 
       for (const lang of shikiConfig.langs) {
         monaco.languages.register({ id: lang });
       }
 
-      shikiToMonaco(highlighterRef.current, monaco);
+      shikiToMonaco(highlighter, monaco);
       monaco.editor.setTheme(getShikiTheme());
     }
   };

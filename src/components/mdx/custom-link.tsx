@@ -13,7 +13,7 @@ export default function CustomLink({
 
   if (isInternalLink) {
     return (
-      <Link className="my-3" href={href} {...props}>
+      <Link className="my-4 underline" href={href} {...props}>
         {children}
       </Link>
     );
@@ -22,7 +22,7 @@ export default function CustomLink({
   // External links open in a new tab
   return (
     <a
-      className="my-3"
+      className="my-4 underline"
       href={href}
       target="_blank"
       rel="noopener noreferrer"

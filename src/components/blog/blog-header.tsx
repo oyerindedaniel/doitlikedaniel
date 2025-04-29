@@ -29,7 +29,7 @@ export default function BlogHeader() {
           Insights & Thoughts
         </Badge>
 
-        <h1 className="serif-heading mb-3 text-3xl font-normal tracking-tight text-gray-900 dark:text-white sm:text-4xl">
+        <h1 className="serif-heading mb-3 text-3xl tracking-tight text-gray-900 dark:text-white sm:text-4xl">
           Personal Blog
         </h1>
 

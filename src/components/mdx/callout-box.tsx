@@ -10,7 +10,7 @@ export interface CalloutBoxProps {
 
 export function CalloutBox({ children, title, icon }: CalloutBoxProps) {
   return (
-    <div className="my-3 rounded-sm border-l-4 border-blue-500 bg-blue-50/50 p-4 dark:border-blue-700 dark:bg-blue-950/30">
+    <div className="my-4 rounded-sm border-l-4 border-blue-500 bg-blue-50/50 p-4 dark:border-blue-700 dark:bg-blue-950/30">
       <div className="flex items-start gap-3">
         {icon && (
           <div className="flex-shrink-0 text-blue-600 dark:text-blue-400">

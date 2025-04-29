@@ -79,14 +79,14 @@ export const MonacoCodeEditor = memo(function MonacoCodeEditor({
   const monacoLanguage = getMonacoLanguage();
   const modelUri = `file:///${uniqueId}-${derivedFilename}`;
 
-  useEffect(() => {
-    if (editorRef.current && code && isEditorMounted) {
-      const currentValue = editorRef.current.getValue();
-      if (currentValue !== code) {
-        editorRef.current.setValue(code);
-      }
-    }
-  }, [code, isEditorMounted]);
+  // useEffect(() => {
+  //   if (editorRef.current && code && isEditorMounted) {
+  //     const currentValue = editorRef.current.getValue();
+  //     if (currentValue !== code) {
+  //       editorRef.current.setValue(code);
+  //     }
+  //   }
+  // }, [code, isEditorMounted]);
 
   const handleEditorMount: OnMount = async (editor, monaco) => {
     editorRef.current = editor;
@@ -156,7 +156,7 @@ export const MonacoCodeEditor = memo(function MonacoCodeEditor({
   useEffect(() => {
     return () => {
       if (editorRef.current) {
-        // Editor disposal is handled by Monaco
+        editorRef.current.dispose();
         editorRef.current = null;
       }
     };
