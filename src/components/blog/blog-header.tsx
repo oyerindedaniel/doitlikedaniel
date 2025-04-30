@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 
 export default function BlogHeader() {
   return (
-    <div className="relative mb-12 overflow-hidden pb-8 pt-16">
+    <div className="relative mb-12 overflow-hidden pb-8 pt-16 rounded-xl">
       {/* Subtle background with minimal noise texture */}
       <div
         className="absolute inset-0 bg-gradient-to-b from-gray-50/50 to-white dark:from-gray-900/50 dark:to-gray-950"
@@ -24,7 +24,7 @@ export default function BlogHeader() {
       />
 
       {/* Content */}
-      <div className="relative container mx-auto px-6">
+      <div className="relative mx-auto px-6">
         <Badge variant="primary" size="sm" className="mb-4">
           Insights & Thoughts
         </Badge>

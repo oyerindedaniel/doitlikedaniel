@@ -6,21 +6,21 @@ const badgeVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-gray-100/80 text-gray-800 hover:bg-gray-200/90 dark:bg-gray-800/70 dark:text-gray-200 backdrop-blur-sm",
+          "bg-gray-100/80 text-gray-800 dark:bg-gray-800/70 dark:text-gray-200 backdrop-blur-sm",
         primary:
-          "bg-blue-50/80 text-blue-800 hover:bg-blue-100/90 dark:bg-blue-900/30 dark:text-blue-300 backdrop-blur-sm",
+          "bg-blue-50/80 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 backdrop-blur-sm",
         secondary:
-          "bg-purple-50/80 text-purple-800 hover:bg-purple-100/90 dark:bg-purple-900/30 dark:text-purple-300 backdrop-blur-sm",
+          "bg-purple-50/80 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300 backdrop-blur-sm",
         success:
-          "bg-green-50/80 text-green-800 hover:bg-green-100/90 dark:bg-green-900/30 dark:text-green-300 backdrop-blur-sm",
+          "bg-green-50/80 text-green-800 dark:bg-green-900/30 dark:text-green-300 backdrop-blur-sm",
         destructive:
-          "bg-red-50/80 text-red-800 hover:bg-red-100/90 dark:bg-red-900/30 dark:text-red-300 backdrop-blur-sm",
+          "bg-red-50/80 text-red-800 dark:bg-red-900/30 dark:text-red-300 backdrop-blur-sm",
         outline:
-          "border border-gray-200/70 bg-white/50 text-gray-900 hover:bg-gray-100/60 dark:border-gray-800 dark:bg-gray-950/30 dark:text-gray-50 backdrop-blur-sm",
+          "border border-gray-200/70 bg-white/50 text-gray-900 dark:border-gray-800 dark:bg-gray-950/30 dark:text-gray-50 backdrop-blur-sm",
         subtle:
-          "bg-white/30 text-gray-900 hover:bg-white/50 dark:bg-gray-800/30 dark:text-gray-50 backdrop-blur-sm",
+          "bg-white/30 text-gray-900 dark:bg-gray-800/30 dark:text-gray-50 backdrop-blur-sm",
         ghost:
-          "bg-transparent text-gray-800 hover:bg-gray-100/50 dark:text-gray-200 dark:hover:bg-gray-800/30 backdrop-blur-sm",
+          "bg-transparent text-gray-800 dark:text-gray-200 backdrop-blur-sm",
       },
       size: {
         sm: "px-2 py-0.5 text-xs",

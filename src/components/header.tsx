@@ -9,18 +9,19 @@ import { siteConfig } from "@/config/site";
 export default function Header() {
   const pathname = usePathname();
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const isActive = (path: string) => {
     return pathname === path;
   };
 
   return (
     <header className="bg-background">
-      <div className="mx-auto px-6 py-4 flex justify-between items-center">
+      <div className="mx-auto px-5 md:px-8 py-4 flex justify-between items-center">
         {/* <Link href="/" className="text-xl font-bold">
           Daniel
         </Link> */}
 
-        <nav className="ml-auto text-sm flex items-center gap-6">
+        <nav className="ml-auto text-sm flex items-center gap-12">
           <ul className="flex gap-6">
             {/* <li>
               <Link
@@ -35,7 +36,7 @@ export default function Header() {
               </Link>
             </li> */}
 
-            <li>
+            {/* <li>
               <Link
                 href="/blog"
                 className={`transition-colors ${
@@ -44,7 +45,7 @@ export default function Header() {
               >
                 Blog
               </Link>
-            </li>
+            </li> */}
             {/* <li>
               <Link
                 href="/about"
@@ -66,7 +67,7 @@ export default function Header() {
               </Link>
             </li> */}
           </ul>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <Button asChild variant="gradient" className="h-9 w-9">
               <Link
                 href={siteConfig.social.github}
