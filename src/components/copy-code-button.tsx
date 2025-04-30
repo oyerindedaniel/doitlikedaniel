@@ -1,29 +1,41 @@
-import { useCallback, useState } from "react";
+import { RefObject, useCallback, useState } from "react";
 import { Button, ButtonProps } from "@/components/ui/button";
 import logger from "@/utils/logger";
 import { cn } from "@/lib/utils";
+import type * as Monaco from "monaco-editor";
 
-interface CopyCodeButtonProps extends ButtonProps {
+interface CopyCodeButtonBaseProps extends ButtonProps {
   code: string;
 }
 
-export function CopyCodeButton({
-  code,
-  className,
-  ...props
-}: CopyCodeButtonProps) {
+type CopyCodeButtonProps =
+  | (CopyCodeButtonBaseProps & { isEditor: false })
+  | (CopyCodeButtonBaseProps & {
+      isEditor: true;
+      editor: RefObject<Monaco.editor.IStandaloneCodeEditor | null>;
+    });
+
+export function CopyCodeButton(props: CopyCodeButtonProps) {
+  const { className, code, isEditor, ...restProps } = props;
+
   const [isCopied, setIsCopied] = useState<boolean>(false);
 
   const handleCopy = useCallback(() => {
     try {
-      navigator.clipboard.writeText(code);
+      const textToCopy =
+        isEditor && props.editor.current
+          ? props.editor.current.getValue()
+          : code;
+
+      navigator.clipboard.writeText(textToCopy);
       setIsCopied(true);
 
       setTimeout(() => setIsCopied(false), 2000);
     } catch (error) {
       logger.error("Failed to copy code:", error);
     }
-  }, [code]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [code, isEditor]);
 
   return (
     <Button
@@ -31,7 +43,7 @@ export function CopyCodeButton({
       size="sm"
       className={cn("text-xs rounded px-3! py-1! w-fit h-fit", className)}
       onClick={handleCopy}
-      {...props}
+      {...restProps}
     >
       {isCopied ? (
         <span className="inline-flex items-center gap-1.5">

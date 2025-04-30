@@ -4,7 +4,6 @@ import React, { useRef, useState, useEffect, useId, memo } from "react";
 import type { OnMount } from "@monaco-editor/react";
 import type * as Monaco from "monaco-editor";
 import { cn } from "@/lib/utils";
-import logger from "@/utils/logger";
 import { MonacoLoader } from "../monaco-loader";
 import { useShikiMonaco } from "@/hooks/use-shiki-monaco";
 import { Editor } from "@monaco-editor/react";
@@ -12,7 +11,7 @@ import { SupportedLanguage } from "@/types/mdx";
 import { Badge } from "../ui/badge";
 
 export interface CodeEditorProps {
-  code: string;
+  defaultCode: string;
   language: SupportedLanguage;
   editable?: boolean;
   height?: string | number;
@@ -26,7 +25,7 @@ export interface CodeEditorProps {
 }
 
 export const MonacoCodeEditor = memo(function MonacoCodeEditor({
-  code,
+  defaultCode,
   language = "typescript",
   editable = false,
   height = "300px",
@@ -54,17 +53,6 @@ export const MonacoCodeEditor = memo(function MonacoCodeEditor({
         ? "example.py"
         : "example.txt");
 
-  useEffect(() => {
-    logger.log(`CodeEditor update - ${derivedFilename}`, {
-      id: uniqueId,
-      codeSnippet: code?.substring(0, 100) + "...",
-      language,
-      editable,
-      height,
-      firstLine: code?.split("\n")[0],
-    });
-  }, [code, language, editable, height, uniqueId, derivedFilename]);
-
   const getMonacoLanguage = () => {
     switch (language) {
       case "typescript":
@@ -78,15 +66,6 @@ export const MonacoCodeEditor = memo(function MonacoCodeEditor({
 
   const monacoLanguage = getMonacoLanguage();
   const modelUri = `file:///${uniqueId}-${derivedFilename}`;
-
-  useEffect(() => {
-    if (editorRef.current && code && isEditorMounted) {
-      const currentValue = editorRef.current.getValue();
-      if (currentValue !== code) {
-        editorRef.current.setValue(code);
-      }
-    }
-  }, [code, isEditorMounted]);
 
   const handleEditorMount: OnMount = async (editor, monaco) => {
     editorRef.current = editor;
@@ -117,15 +96,12 @@ export const MonacoCodeEditor = memo(function MonacoCodeEditor({
         strict: true,
       });
 
+      // TOD0: support react
       monaco.languages.typescript.typescriptDefaults.addExtraLib(
         `
         declare module "react" {
           export default React;
-          export namespace React {
-            interface Component {}
-            function createElement(type: any, props?: any, ...children: any[]): any;
-            function useState<T>(initialState: T): [T, (newState: T) => void];
-          }
+          export namespace React {}
         }
         `,
         "file:///node_modules/@types/react/index.d.ts"
@@ -134,23 +110,8 @@ export const MonacoCodeEditor = memo(function MonacoCodeEditor({
 
     await setupMonaco(monaco);
 
-    const uri = monaco.Uri.parse(modelUri);
-
-    const existingModel = monaco.editor.getModel(uri);
-    if (existingModel) {
-      logger.log(`Disposing existing model for ${modelUri}`);
-      existingModel.dispose();
-    }
-
-    const model = monaco.editor.createModel(code || "", monacoLanguage, uri);
-
-    editor.setModel(model);
+    // sole purpose is hiding header
     setIsEditorMounted(true);
-
-    logger.log(`Using model for ${modelUri}`, {
-      codePreview: code?.substring(0, 50),
-      modelLanguage: model.getLanguageId(),
-    });
   };
 
   useEffect(() => {
@@ -195,8 +156,8 @@ export const MonacoCodeEditor = memo(function MonacoCodeEditor({
 
       <Editor
         height={height}
-        language={monacoLanguage}
-        value={code}
+        defaultLanguage={monacoLanguage}
+        defaultValue={defaultCode}
         theme={theme}
         options={{
           readOnly: !editable,

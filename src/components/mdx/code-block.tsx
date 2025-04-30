@@ -24,7 +24,7 @@ export default function CodeBlock({
 
       <div className="mt-2 text-right">
         {/* Copy button */}
-        <CopyCodeButton code={extractRawCode(children)} />
+        <CopyCodeButton isEditor={false} code={extractRawCode(children)} />
       </div>
     </div>
   );

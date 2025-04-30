@@ -62,7 +62,7 @@ export function MonacoLoader({
                 "dark:bg-gradient-to-r dark:from-zinc-900 dark:via-zinc-800 dark:to-zinc-900 dark:bg-[length:200%_100%]"
               )}
               style={{
-                width: `${Math.random() * 60 + 20}%`,
+                width: `100%`,
               }}
             ></div>
           </div>
