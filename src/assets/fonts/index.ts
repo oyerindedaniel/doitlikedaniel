@@ -8,6 +8,15 @@ import {} from // Source_Serif_4 as SourceSerif,
 // Lora,
 "next/font/google";
 
+const geistSans = localFont({
+  src: "./GeistVF.woff",
+  variable: "--font-geist-sans",
+});
+const geistMono = localFont({
+  src: "./GeistMonoVF.woff",
+  variable: "--font-geist-mono",
+});
+
 const manrope = localFont({
   src: [
     {
@@ -73,4 +82,4 @@ const manrope = localFont({
 
 // export const fontVariables = `${serif.variable} ${inter.variable} ${loraSerif.variable} ${merriweather.variable} ${manrope.variable}`;
 
-export const fontVariables = `${manrope.variable}`;
+export const fontVariables = `${manrope.variable} ${geistMono.variable} ${geistSans.variable}`;

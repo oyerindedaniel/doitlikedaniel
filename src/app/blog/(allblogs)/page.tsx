@@ -22,7 +22,7 @@ export default function BlogPage() {
       <>
         <BlogHeader />
 
-        <div className="container mx-auto px-6 pb-16">
+        <div className="mx-auto px-5 pb-16">
           {featuredPost && <FeaturedCard post={featuredPost} />}
 
           <div>

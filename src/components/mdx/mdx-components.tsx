@@ -59,7 +59,7 @@ export const mdxComponents = {
   ),
   h2: ({ children, ...props }: ComponentProps) => (
     <h2
-      className="mt-6 text-xl leading-tight  text-slate-800 dark:text-slate-100"
+      className="mt-8 text-xl leading-tight  text-slate-800 dark:text-slate-100"
       {...props}
     >
       {children}
@@ -67,7 +67,7 @@ export const mdxComponents = {
   ),
   h3: ({ children, ...props }: ComponentProps) => (
     <h3
-      className="mt-6 text-lg leading-tight  text-slate-800 dark:text-slate-100"
+      className="mt-8 text-lg leading-tight  text-slate-800 dark:text-slate-100"
       {...props}
     >
       {children}
@@ -75,7 +75,7 @@ export const mdxComponents = {
   ),
   h4: ({ children, ...props }: ComponentProps) => (
     <h4
-      className="mt-6 text-md leading-tight text-slate-800 dark:text-slate-200"
+      className="mt-8 text-md leading-tight text-slate-800 dark:text-slate-200"
       {...props}
     >
       {children}
@@ -83,7 +83,7 @@ export const mdxComponents = {
   ),
   p: ({ children, ...props }: ComponentProps) => (
     <p
-      className="mt-3 mb-4 text-slate-700 text-[0.95rem] md:text-base dark:text-slate-300 leading-relaxed"
+      className="mt-2 mb-4 text-slate-700 text-base dark:text-slate-300 leading-relaxed"
       {...props}
     >
       {children}

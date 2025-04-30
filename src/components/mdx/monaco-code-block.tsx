@@ -3,18 +3,12 @@
 import React, { useId, useCallback, memo } from "react";
 import { CodeEditorProps } from "./monaco-code-editor";
 import { CopyCodeButton } from "../copy-code-button";
-import { MonacoLoader } from "../monaco-loader";
 import type * as Monaco from "monaco-editor";
 import { useCodeFormatting } from "@/hooks/use-code-formatting";
-import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import { SaveIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-const MonacoCodeEditor = dynamic(
-  () => import("./monaco-code-editor").then((mod) => mod.MonacoCodeEditor),
-  { ssr: false, loading: () => <MonacoLoader height="300px" /> }
-);
+import { MonacoCodeEditor } from "./monaco-code-editor";
 
 export interface MonacoCodeBlockProps
   extends Pick<
