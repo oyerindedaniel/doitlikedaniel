@@ -9,6 +9,7 @@ import { useShikiMonaco } from "@/hooks/use-shiki-monaco";
 import { Editor } from "@monaco-editor/react";
 import { SupportedLanguage } from "@/types/mdx";
 import { Badge } from "../ui/badge";
+import { getDerivedFilename, getMonacoLanguage } from "@/utils/monaco";
 
 export interface CodeEditorProps {
   defaultCode: string;
@@ -45,26 +46,9 @@ export const MonacoCodeEditor = memo(function MonacoCodeEditor({
   const uniqueId = instanceId || generatedId;
   const { setupMonaco, theme } = useShikiMonaco();
 
-  const derivedFilename =
-    filename ||
-    (language === "typescript"
-      ? "example.ts"
-      : language === "python"
-        ? "example.py"
-        : "example.txt");
+  const derivedFilename = getDerivedFilename(language, filename);
+  const monacoLanguage = getMonacoLanguage(language, filename);
 
-  const getMonacoLanguage = () => {
-    switch (language) {
-      case "typescript":
-        return filename?.endsWith(".tsx") ? "typescript" : "typescript";
-      case "python":
-        return "python";
-      default:
-        return "plaintext";
-    }
-  };
-
-  const monacoLanguage = getMonacoLanguage();
   const modelUri = `file:///${uniqueId}-${derivedFilename}`;
 
   const handleEditorMount: OnMount = async (editor, monaco) => {
@@ -81,6 +65,14 @@ export const MonacoCodeEditor = memo(function MonacoCodeEditor({
         noSyntaxValidation: false,
       });
 
+      const reactTypes = await fetch(
+        "https://unpkg.com/@types/react/index.d.ts"
+      ).then((res) => res.text());
+      monaco.languages.typescript.typescriptDefaults.addExtraLib(
+        reactTypes,
+        "file:///node_modules/@types/react/index.d.ts"
+      );
+
       monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
         target: monaco.languages.typescript.ScriptTarget.ES2020,
         allowNonTsExtensions: true,
@@ -95,22 +87,11 @@ export const MonacoCodeEditor = memo(function MonacoCodeEditor({
         typeRoots: ["node_modules/@types"],
         strict: true,
       });
-
-      // TOD0: support react
-      monaco.languages.typescript.typescriptDefaults.addExtraLib(
-        `
-        declare module "react" {
-          export default React;
-          export namespace React {}
-        }
-        `,
-        "file:///node_modules/@types/react/index.d.ts"
-      );
     }
 
     await setupMonaco(monaco);
 
-    // sole purpose is hiding header
+    // Ensure the editor is fully mounted before showing the header
     setIsEditorMounted(true);
   };
 
@@ -127,7 +108,7 @@ export const MonacoCodeEditor = memo(function MonacoCodeEditor({
     <div
       tabIndex={0}
       className={cn(
-        "relative rounded-[0.5rem] overflow-hidden border border-gray-200 dark:border-[#27272a] outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/20",
+        "relative rounded-md border border-gray-200 dark:border-[#27272a] outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/20",
         isHovering &&
           editable &&
           "ring-2 ring-offset-2 ring-offset-background ring-blue-500/20",
@@ -139,7 +120,7 @@ export const MonacoCodeEditor = memo(function MonacoCodeEditor({
       data-language={language}
     >
       {derivedFilename && isEditorMounted && (
-        <div className="flex items-center justify-between px-4 py-2 bg-gray-100 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
+        <div className="flex items-center justify-between px-4 py-2 rounded-t-md bg-gray-100 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
           <div className="text-xs font-mono text-gray-500 dark:text-gray-400">
             {derivedFilename}
           </div>
@@ -154,36 +135,38 @@ export const MonacoCodeEditor = memo(function MonacoCodeEditor({
         </div>
       )}
 
-      <Editor
-        height={height}
-        defaultLanguage={monacoLanguage}
-        defaultValue={defaultCode}
-        theme={theme}
-        options={{
-          readOnly: !editable,
-          minimap: { enabled: minimap },
-          scrollBeyondLastLine: false,
-          lineNumbers: showLineNumbers ? "on" : "off",
-          folding: true,
-          matchBrackets: "always",
-          automaticLayout: true,
-          tabSize: language === "python" ? 4 : 2,
-          formatOnPaste: true,
-          formatOnType: true,
-          hover: { enabled: true, delay: 300 },
-          parameterHints: { enabled: true },
-          quickSuggestions: editable,
-          suggestOnTriggerCharacters: editable,
-          wordBasedSuggestions: editable ? "currentDocument" : "off",
-          renderValidationDecorations: editable ? "on" : "off",
-          padding: { top: 16, bottom: 16 },
-        }}
-        onChange={(value) => onChange && value && onChange(value)}
-        onMount={handleEditorMount}
-        className="monaco-editor-container"
-        path={modelUri}
-        loading={<MonacoLoader height={height} />}
-      />
+      <div className="rounded-b-md">
+        <Editor
+          height={height}
+          defaultLanguage={monacoLanguage}
+          defaultValue={defaultCode}
+          theme={theme}
+          options={{
+            readOnly: !editable,
+            minimap: { enabled: minimap },
+            scrollBeyondLastLine: false,
+            lineNumbers: showLineNumbers ? "on" : "off",
+            folding: true,
+            matchBrackets: "always",
+            automaticLayout: true,
+            tabSize: language === "python" ? 4 : 2,
+            formatOnPaste: true,
+            formatOnType: true,
+            hover: { enabled: true, delay: 300 },
+            parameterHints: { enabled: true },
+            quickSuggestions: editable,
+            suggestOnTriggerCharacters: editable,
+            wordBasedSuggestions: editable ? "currentDocument" : "off",
+            renderValidationDecorations: editable ? "on" : "off",
+            padding: { top: 16, bottom: 16 },
+          }}
+          onChange={(value) => onChange && value && onChange(value)}
+          onMount={handleEditorMount}
+          className="monaco-editor-container"
+          path={modelUri}
+          loading={<MonacoLoader height={height} />}
+        />
+      </div>
     </div>
   );
 });

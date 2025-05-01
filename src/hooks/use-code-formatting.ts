@@ -60,8 +60,10 @@ export function useCodeFormatting({
          * Monaco will then use this state as `defaultValue` when it mounts.
          * Ensures the editor starts with formatted content without relying on reactive updates.
          */
-        if (!isDefaultCodeFormatted.current && !editorRef.current) {
-          setDefaultCode(formattedCode);
+        if (!isDefaultCodeFormatted.current) {
+          if (!editorRef.current) {
+            setDefaultCode(formattedCode);
+          }
           isDefaultCodeFormatted.current = true;
         }
       }
