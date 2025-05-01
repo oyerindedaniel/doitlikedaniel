@@ -82,3 +82,10 @@ export function getPlatformKeybinding(platform: Platform): {
       };
   }
 }
+
+export const formatKeyLabel = getPlatformKeyText(
+  "Alt+Shift+F",
+  "⌥⇧F", // Mac
+  "Alt+Shift+F", // Windows
+  "Ctrl+Shift+F" // Linux
+);

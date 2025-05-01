@@ -3,11 +3,10 @@ import { formatCode } from "@/utils/code-formatter";
 import logger from "@/utils/logger";
 import type * as Monaco from "monaco-editor";
 import { CodeEditorProps } from "@/components/mdx/monaco-code-editor";
-import { useDebouncedCallback } from "./use-debounced-callback";
 
 interface UseCodeFormattingProps
   extends Pick<CodeEditorProps, "editable" | "language" | "filename"> {
-  initialCode: CodeEditorProps["code"];
+  initialCode: CodeEditorProps["defaultCode"];
   id: CodeEditorProps["instanceId"];
 }
 
@@ -19,7 +18,8 @@ export function useCodeFormatting({
   editable = false,
 }: UseCodeFormattingProps) {
   const editorRef = useRef<Monaco.editor.IStandaloneCodeEditor | null>(null);
-  const [code, setCode] = useState(initialCode?.trim() || "");
+  const [defaultCode, setDefaultCode] = useState(initialCode?.trim() || "");
+  const isDefaultCodeFormatted = useRef(false);
   const pendingFormatRef = useRef(true);
 
   /**
@@ -29,8 +29,8 @@ export function useCodeFormatting({
    */
 
   const formatAndSetCode = useCallback(
-    async (code?: string) => {
-      const codeToFormat = code ?? editorRef.current?.getValue();
+    async (defaultCode?: string) => {
+      const codeToFormat = defaultCode ?? editorRef.current?.getValue();
 
       if (!codeToFormat || !codeToFormat.trim()) return;
       if (!pendingFormatRef.current) return;
@@ -44,7 +44,28 @@ export function useCodeFormatting({
           language,
         });
 
-        setCode(formattedCode);
+        /**
+         * Sets editor content directly after mount.
+         * Avoids using React state, which would bind `value` prop —
+         * causing Monaco to track and react to value changes on every render.
+         * Direct `setValue` gives full control without triggering Monaco’s internal reactivity.
+         */
+        if (editorRef.current) {
+          editorRef.current.setValue(formattedCode);
+        }
+
+        /**
+         * On initial render, Monaco hasn't mounted yet — it ignores the initial unformatted code.
+         * After mount-triggered side effects run.
+         * Monaco will then use this state as `defaultValue` when it mounts.
+         * Ensures the editor starts with formatted content without relying on reactive updates.
+         */
+        if (!isDefaultCodeFormatted.current) {
+          if (!editorRef.current) {
+            setDefaultCode(formattedCode);
+          }
+          isDefaultCodeFormatted.current = true;
+        }
       }
 
       pendingFormatRef.current = false;
@@ -82,8 +103,6 @@ export function useCodeFormatting({
     (newCode: string) => {
       if (!newCode) return;
 
-      setCode(newCode);
-
       if (editable) {
         pendingFormatRef.current = true;
       }
@@ -91,14 +110,11 @@ export function useCodeFormatting({
     [editable]
   );
 
-  const debouncedHandleChange = useDebouncedCallback(handleCodeChange, 250);
-
   return {
-    code,
-    setCode,
+    defaultCode,
     formatAndSetCode,
     handleEditorDidMount,
-    handleCodeChange: debouncedHandleChange,
+    handleCodeChange,
     editorRef,
   };
 }

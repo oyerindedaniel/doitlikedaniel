@@ -37,21 +37,19 @@ export const MonacoCodeBlock = memo(function MonacoCodeBlock({
   const generatedId = useId();
   const blockId = id || `monaco-block-${generatedId}`;
 
-  const { code, formatAndSetCode, handleEditorDidMount, handleCodeChange } =
-    useCodeFormatting({
-      initialCode: children,
-      language,
-      id: blockId,
-      filename,
-      editable,
-    });
-
-  // const formatKeyLabel = getPlatformKeyText(
-  //   "Alt+Shift+F",
-  //   "⌥⇧F", // Mac
-  //   "Alt+Shift+F", // Windows
-  //   "Ctrl+Shift+F" // Linux
-  // );
+  const {
+    defaultCode,
+    formatAndSetCode,
+    handleEditorDidMount,
+    handleCodeChange,
+    editorRef,
+  } = useCodeFormatting({
+    initialCode: children,
+    language,
+    id: blockId,
+    filename,
+    editable,
+  });
 
   const handleEditorMount = useCallback(
     (editor: Monaco.editor.IStandaloneCodeEditor) => {
@@ -61,10 +59,10 @@ export const MonacoCodeBlock = memo(function MonacoCodeBlock({
   );
 
   return (
-    <div className="my-3 group" data-monaco-block-id={blockId}>
+    <div className="my-4 group" data-monaco-block-id={blockId}>
       <MonacoCodeEditor
         key={`${blockId}-${filename}`}
-        code={code}
+        defaultCode={defaultCode}
         language={language}
         editable={editable}
         height={height}
@@ -91,7 +89,7 @@ export const MonacoCodeBlock = memo(function MonacoCodeBlock({
           </div>
         )}
 
-        <CopyCodeButton code={code} />
+        <CopyCodeButton isEditor editor={editorRef} code={defaultCode} />
       </div>
     </div>
   );

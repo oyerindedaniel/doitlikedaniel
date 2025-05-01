@@ -10,10 +10,3 @@ export const shikiConfig = {
    */
   langs: ["javascript", "typescript", "tsx", "jsx", "css", "diff"],
 };
-
-export const supportedLanguages = [
-  { id: "js", alias: "javascript" },
-  { id: "ts", alias: "typescript" },
-  { id: "tsx", alias: "typescript" },
-  { id: "jsx", alias: "javascript" },
-];

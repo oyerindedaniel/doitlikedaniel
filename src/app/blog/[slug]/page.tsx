@@ -241,9 +241,7 @@ export default async function BlogPostPage({
             <div className="bg-gray-100 dark:bg-gray-800 h-px w-full my-6" />
 
             {/* Article content */}
-            <article className="prose prose-sm max-w-none text-slate-700 dark:prose-invert prose-headings:font-bold prose-headings:text-slate-900 prose-p:leading-relaxed prose-p:text-slate-700 prose-a:text-blue-600 prose-a:underline prose-a:underline-offset-2 hover:prose-a:text-blue-800 dark:prose-headings:text-slate-50 dark:prose-p:text-slate-300 dark:prose-a:text-blue-400 dark:hover:prose-a:text-blue-300">
-              {mdxContent}
-            </article>
+            <article>{mdxContent}</article>
           </div>
 
           {/* Table of Contents */}
