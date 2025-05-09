@@ -59,6 +59,11 @@ export const MonacoCodeEditor = memo(function MonacoCodeEditor({
       onEditorDidMount(editor);
     }
 
+    // Ensure the editor is fully mounted before showing the header
+    setIsEditorMounted(true);
+
+    await setupMonaco(monaco);
+
     if (language === "typescript") {
       monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
         noSemanticValidation: false,
@@ -88,11 +93,6 @@ export const MonacoCodeEditor = memo(function MonacoCodeEditor({
         strict: true,
       });
     }
-
-    await setupMonaco(monaco);
-
-    // Ensure the editor is fully mounted before showing the header
-    setIsEditorMounted(true);
   };
 
   useEffect(() => {

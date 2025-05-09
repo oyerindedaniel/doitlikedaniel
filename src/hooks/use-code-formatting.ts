@@ -55,7 +55,7 @@ export function useCodeFormatting({
         }
 
         /**
-         * On initial render, Monaco hasn't mounted yet — it ignores the initial unformatted code.
+         * During hydration, Monaco hasn't mounted yet — it ignores the initial unformatted code.
          * After mount-triggered side effects run.
          * Monaco will then use this state as `defaultValue` when it mounts.
          * Ensures the editor starts with formatted content without relying on reactive updates.

@@ -7,16 +7,17 @@ export function getDerivedFilename(
   language: SupportedLanguage,
   filename?: string
 ): string {
-  return (
-    filename ||
-    (language === "typescript"
-      ? filename?.endsWith(".tsx")
-        ? "example.tsx"
-        : "example.ts"
-      : language === "python"
-        ? "example.py"
-        : "example.txt")
-  );
+  if (filename) return filename;
+
+  if (language === "typescript") {
+    return "example.ts";
+  }
+
+  if (language === "python") {
+    return "example.py";
+  }
+
+  return "example.txt";
 }
 
 /**
